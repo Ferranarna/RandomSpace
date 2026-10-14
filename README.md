@@ -66,7 +66,61 @@ RandomSpace/
 └── settings.gradle.kts   Módulos del proyecto
 ```
 
-_La organización interna de paquetes se documentará cuando el equipo la acuerde._
+## Arquitectura del código
+
+El código vive en `app/src/main/java/com/bugbusters/randomspace/` y se organiza **por capas**.
+Cada carpeta contiene un `explicacion.md` que describe qué va dentro y qué tipo de archivos.
+
+```
+com/bugbusters/randomspace/
+├── ui/                  Interfaz: lo que el jugador ve y toca
+│   ├── welcome/         Pantalla de bienvenida y mejores partidas
+│   └── game/            Pantalla de la partida (Canvas y animaciones)
+├── game/                Lógica del juego de azar (sin dependencias de Android)
+├── model/               Clases de datos: jugador, partida, puntuación
+└── data/                Guardar y recuperar información
+    ├── local/           SQLite
+    └── repository/      Puerta de entrada a los datos (RxJava)
+```
+
+Los recursos (`app/src/main/res/`) siguen la estructura estándar de Android: `layout/`, `drawable/`, `values/` (textos, colores, temas), `mipmap-*/` (icono) y, cuando haga falta, `menu/`.
+Los textos visibles van siempre en `strings.xml`, nunca escritos en el código o el layout.
+
+### Regla de dependencias
+
+```
+ui  ──►  game
+ │        │
+ └──►  data/repository  ──►  data/local
+ │        │
+ └────────┴──►  model
+```
+
+`ui` puede usar `game`, `data` y `model`. `game` y `data` pueden usar `model`. **Nunca al revés**: `model` no conoce a nadie, y `game` no importa nada de `android.*`.
+
+### Por qué por capas
+
+- **Responsabilidad única**: cada carpeta hace una sola cosa. Si falla el guardado de partidas se mira en `data/`; si falla una regla, en `game/`; si falla un dibujo, en `ui/`.
+- **Lógica fácil de ampliar y de probar**: al no depender de Android, `game/` se prueba con tests unitarios sin emulador y se le pueden añadir reglas sin tocar la interfaz.
+- **Base de datos aislada**: la UI solo habla con el repositorio, que decide los hilos con RxJava. Así no se bloquea el hilo principal.
+- **Trabajo en equipo**: cada persona puede trabajar en una capa distinta con menos conflictos de Git.
+- **Se explica bien en el UML y en la memoria**: las capas se corresponden con los paquetes del diagrama de clases.
+
+Se descarta organizar por funcionalidad (`welcome/`, `ranking/`… cada una con su UI, datos y lógica) porque el proyecto es pequeño y crece **añadiendo capas**, no módulos independientes.
+
+### Cómo se ampliará
+
+Cada producto añade carpetas nuevas sin mover las existentes:
+
+| Producto | Se añade | Para qué |
+|---|---|---|
+| P2 | `service/` | Música de fondo y gestión del foco de audio |
+| P2 | `util/` | Permisos, calendario, notificaciones, capturas, ubicación e idioma |
+| P2 | `ui/help/`, `ui/settings/` | WebView de ayuda; ajustes de música e idioma |
+| P3 | `remote/` | Retrofit + Moshi y Firebase (login, top ten, premio común) |
+| P3 | `ui/ranking/` | Pantalla del top ten y login con Google |
+
+El `repository` es el punto clave: en P3 combinará `data/local/` con `remote/`, y la UI no tendrá que cambiar.
 
 ## Qué no se sube al repositorio
 
