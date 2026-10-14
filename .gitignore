@@ -1,0 +1,29 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# IDE: cada miembro del equipo tiene su configuración local
+/.idea/
+
+# Firmas y secretos (P3: no subir al repositorio)
+*.jks
+*.keystore
+google-services.json
+
+# Sistema operativo
+Thumbs.db
+
+# Caché de Kotlin
+.kotlin/

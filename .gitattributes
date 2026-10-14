@@ -1,0 +1,14 @@
+* text=auto
+
+# Scripts: fin de línea fijo según el sistema que los ejecuta
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+
+# Binarios
+*.png binary
+*.jpg binary
+*.webp binary
+*.jar binary
+*.mp3 binary
+*.ogg binary
