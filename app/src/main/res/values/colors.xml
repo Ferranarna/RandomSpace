@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="bg_dark">#0B0A2A</color>
+    <color name="dark_purple">#140B3A</color>
+    <color name="medium_purple">#2A1466</color>
+    <color name="purple">#8A2BE2</color>
+    <color name="magenta">#CA1AF9</color>
+    <color name="cyan">#29E0FF</color>
+    <color name="yellow">#edd204</color>
+    <color name="green">#2EEA3C</color>
+    <color name="green_pressed">#1FB82B</color>
+    <color name="cyan_pressed">#1DB3CC</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

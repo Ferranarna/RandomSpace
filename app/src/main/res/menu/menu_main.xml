@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_premios"
+        android:title="@string/menu_premios"
+        app:showAsAction="never" />
+    <item android:id="@+id/action_ayuda"
+        android:title="@string/menu_ayuda"
+        app:showAsAction="never" />
+</menu>

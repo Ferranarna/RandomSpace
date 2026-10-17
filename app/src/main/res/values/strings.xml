@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">RandomSpace</string>
+    <string name="app_name">RANDOM SPACE</string>
+    <string name="bote_titulo">"BOTE: "</string>
+    <string name="user_titulo">"USER: "</string>
+    <string name="tus_mejores_partidas">TUS MEJORES PARTIDAS:</string>
+    <string name="btn_jugar">¡JUGAR!</string>
+    <string name="btn_historial">HISTORIAL</string>
+    <string name="menu_premios">Premios</string>
+    <string name="menu_ayuda">Ayuda</string>
 </resources>

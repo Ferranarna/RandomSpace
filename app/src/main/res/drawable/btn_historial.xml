@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Pulsado: relleno más oscuro, borde igual que normal -->
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/cyan_pressed" />
+            <stroke android:width="3dp" android:color="@color/cyan_pressed" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <!-- Normal -->
+    <item>
+        <shape>
+            <solid android:color="@color/cyan" />
+            <stroke android:width="3dp" android:color="@color/cyan_pressed" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</selector>
