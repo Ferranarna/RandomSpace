@@ -5,7 +5,7 @@
     Aquí se define cómo se ve cada tipo de elemento (texto, botones, paneles...)
     para no repetir tamaño, fuente y color en cada pantalla.
     Se usan en los layouts con style="@style/NombreDelEstilo".
-    Los estilos "hijo" (con parent) heredan todo lo del padre y solo cambian lo que añaden.
+    Los estilos "hijo" (con parent) heredan lo del padre y solo cambian lo que añaden.
 
     Fuentes:  pixel_font (texto normal) y pixel_title_font (títulos y botones).
     Colores:  definidos en colors.xml.
@@ -112,5 +112,58 @@
         <item name="android:background">@drawable/btn_opcion_menu</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+    </style>
+
+    <!-- ===== PANTALLA DE AYUDA ===== -->
+    <!-- Panel: icono a la izquierda y texto a la derecha -->
+    <style name="PanelAyuda" parent="Panel">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <!-- Texto de ayuda -->
+    <style name="TextoAyuda" parent="Texto">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Título de cada panel de ayuda -->
+    <style name="TituloAyuda" parent="TextoAyuda">
+        <item name="android:fontFamily">@font/pixel_title_font</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textScaleX">0.8</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+    <!-- Icono de cada panel de ayuda -->
+    <style name="IconoAyuda">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- Columna de texto de un panel de ayuda (ocupa el ancho que deja el icono) -->
+    <style name="ColumnaAyuda">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Línea fina bajo el título de cada panel de ayuda -->
+    <style name="LineaTitulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:background">@color/purple</item>
     </style>
 </resources>
