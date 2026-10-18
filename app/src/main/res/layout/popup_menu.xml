@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Diseño del menú desplegable del botón de menú (hamburguesa).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/panel_magenta"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/opcionPremios"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_premios" />
+
+    <TextView
+        android:id="@+id/opcionAyuda"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_ayuda" />
+</LinearLayout>

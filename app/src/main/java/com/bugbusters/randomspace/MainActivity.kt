@@ -1,11 +1,14 @@
 package com.bugbusters.randomspace
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.PopupMenu
+import android.widget.PopupWindow
+import android.view.ViewGroup
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -55,20 +58,37 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Historial", Toast.LENGTH_SHORT).show()
         }
 
-        // Botón de menú (hamburguesa de la derecha): despliega un menú
-        // con las opciones definidas en res/menu/menu_main.xml
-        findViewById<View>(R.id.btnMenu).setOnClickListener { v ->
-            val popup = PopupMenu(this, v)
-            popup.menuInflater.inflate(R.menu.menu_main, popup.menu)
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.action_premios -> { /* TODO: pantalla Premios */ true }
-                    R.id.action_ayuda -> { /* TODO: pantalla Ayuda */ true }
-                    else -> false // opción no reconocida: no la gestionamos
-                }
-            }
-            popup.show()
+        // Botón de menú (hamburguesa de la derecha): despliega el menú de opciones
+        findViewById<View>(R.id.btnMenu).setOnClickListener { v -> mostrarMenu(v) }
+    }
+
+    /**
+     * Muestra el menú desplegable (layout popup_menu.xml) bajo el botón de menú,
+     * alineado a su borde derecho. Se cierra al elegir una opción o al tocar fuera.
+     *
+     * @param anchor vista bajo la que aparece el menú (el botón de la hamburguesa)
+     */
+    private fun mostrarMenu(anchor: View) {
+        val densidad = resources.displayMetrics.density
+        val ancho = (220 * densidad).toInt()
+
+        val contenido = layoutInflater.inflate(R.layout.popup_menu, null)
+        val popup = PopupWindow(contenido, ancho, ViewGroup.LayoutParams.WRAP_CONTENT, true)
+        // Fondo transparente: necesario para que se cierre al tocar fuera en todas las versiones
+        popup.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // TODO: abrir la pantalla Premios
+        contenido.findViewById<View>(R.id.opcionPremios).setOnClickListener {
+            popup.dismiss()
         }
+
+        // TODO: abrir la pantalla Ayuda
+        contenido.findViewById<View>(R.id.opcionAyuda).setOnClickListener {
+            popup.dismiss()
+        }
+
+        // Desplazamiento horizontal negativo: el borde derecho del menú coincide con el del botón
+        popup.showAsDropDown(anchor, anchor.width - ancho, (8 * densidad).toInt())
     }
 
     /**

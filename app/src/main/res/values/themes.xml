@@ -91,7 +91,6 @@
     </style>
 
     <!-- ===== ICONOS ===== -->
-    <!-- Icono de moneda -->
     <style name="Moneda">
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
@@ -99,5 +98,19 @@
         <item name="android:layout_marginStart">4dp</item>
         <item name="android:src">@drawable/ic_moneda</item>
         <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- ===== MENÚ DESPLEGABLE ===== -->
+    <style name="OpcionMenu" parent="TextoTitulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_opcion_menu</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>

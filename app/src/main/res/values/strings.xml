@@ -5,6 +5,6 @@
     <string name="tus_mejores_partidas">TUS MEJORES PARTIDAS:</string>
     <string name="btn_jugar">¡JUGAR!</string>
     <string name="btn_historial">HISTORIAL</string>
-    <string name="menu_premios">Premios</string>
-    <string name="menu_ayuda">Ayuda</string>
+    <string name="menu_premios">PREMIOS</string>
+    <string name="menu_ayuda">AYUDA</string>
 </resources>
