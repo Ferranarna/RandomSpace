@@ -41,14 +41,14 @@
         <!-- Derecha Menú: botón que abre el menú de opciones -->
         <ImageButton
             android:id="@+id/btnMenu"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="8dp"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_hamburger"
-            android:contentDescription="@null" />
+            android:contentDescription="desc_menu" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- ========== LÍNEA SEPARADORA bajo la barra ========== -->

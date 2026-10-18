@@ -1,10 +1,20 @@
+<!--
+    strings.xml: todos los textos de la app.
+    Para traducir (Producto 2), se copiará este archivo en values-en/ con las mismas claves.
+-->
 <resources>
+    <!-- Pantalla de inicio. -->
     <string name="app_name">RANDOM SPACE</string>
     <string name="bote_titulo">"BOTE: "</string>
     <string name="user_titulo">"USER: "</string>
     <string name="tus_mejores_partidas">TUS MEJORES PARTIDAS:</string>
     <string name="btn_jugar">¡JUGAR!</string>
     <string name="btn_historial">HISTORIAL</string>
+
+    <!-- Opciones del menú desplegable -->
     <string name="menu_premios">PREMIOS</string>
     <string name="menu_ayuda">AYUDA</string>
+
+    <!-- Accesibilidad: no se ve en pantalla, lo lee TalkBack (lector de pantalla) al enfocar el botón de menú -->
+    <string name="desc_menu">Abrir menú</string>
 </resources>
