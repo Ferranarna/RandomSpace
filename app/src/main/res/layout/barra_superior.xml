@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    barra_superior.xml: compartidas por todas las pantallas.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/medium_purple">
+
+        <!-- Izquierda: hamburguesa pixel (decorativa) -->
+        <ImageView
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/ic_burger"
+            android:contentDescription="@null" />
+
+        <!-- Centro: título de la app -->
+        <TextView
+            style="@style/TextoTituloBarra"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name" />
+
+        <!-- Derecha: botón que abre el menú desplegable -->
+        <ImageButton
+            android:id="@+id/btnMenu"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="8dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_hamburger"
+            android:contentDescription="@string/desc_menu" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- Línea separadora bajo la barra -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/magenta" />
+</merge>
