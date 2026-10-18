@@ -1,9 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    themes.xml: tema general y estilos reutilizables de Random Space.
+
+    Aquí se define cómo se ve cada tipo de elemento (texto, botones, paneles...)
+    para no repetir tamaño, fuente y color en cada pantalla.
+    Se usan en los layouts con style="@style/NombreDelEstilo".
+    Los estilos "hijo" (con parent) heredan todo lo del padre y solo cambian lo que añaden.
+
+    Fuentes:  pixel_font (texto normal) y pixel_title_font (títulos y botones).
+    Colores:  definidos en colors.xml.
+-->
+
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.RandomSpace" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- ===== TEMA DE LA APP ===== -->
+    <!-- NoActionBar: no usa la barra por defecto de Android, porque ya tenemos nuestra Toolbar -->
+    <style name="Base.Theme.RandomSpace" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.RandomSpace" parent="Base.Theme.RandomSpace" />
+
+    <!-- ===== TEXTO NORMAL (fuente pixel_font, 30sp, blanco) ===== -->
+    <style name="Texto">
+        <item name="android:fontFamily">@font/pixel_font</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <style name="Theme.RandomSpace" parent="Base.Theme.RandomSpace" />
+    <!-- Cantidades de monedas (bote, saldo, puntuaciones): igual que Texto pero en amarillo -->
+    <style name="TextoMonedas" parent="Texto">
+        <item name="android:textColor">@color/yellow</item>
+    </style>
+
+    <!-- ===== TEXTO TÍTULO (fuente pixel_title_font, 30sp, blanco, estrechado) ===== -->
+    <style name="TextoTitulo">
+        <item name="android:fontFamily">@font/pixel_title_font</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textScaleX">0.8</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Título de la barra superior: igual que TextoTitulo pero más pequeño -->
+    <style name="TextoTituloBarra" parent="TextoTitulo">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <!-- Botones grandes (¡JUGAR!, HISTORIAL...): texto negro centrado, ancho completo y 56dp de alto -->
+    <style name="BotonTitulo" parent="TextoTitulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
+    <!-- ===== CONTENEDORES ===== -->
+    <!-- Panel con borde morado (usuario, mejores partidas...) -->
+    <style name="Panel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/panel_morado</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Espaciador flexible: se reparte el espacio libre de la pantalla con los demás espaciadores -->
+    <style name="Espaciador">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <!-- ===== FILAS DE PUNTUACIONES ===== -->
+    <!-- Fila horizontal: fecha a la izquierda y puntos con moneda a la derecha -->
+    <style name="FilaPuntuacion">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+    </style>
+
+    <!-- Fecha de una partida -->
+    <style name="TextoFecha" parent="Texto">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/cyan</item>
+    </style>
+
+    <!-- ===== ICONOS ===== -->
+    <style name="Moneda">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:src">@drawable/ic_moneda</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- ===== MENÚ DESPLEGABLE ===== -->
+    <style name="OpcionMenu" parent="TextoTitulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/btn_opcion_menu</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>
