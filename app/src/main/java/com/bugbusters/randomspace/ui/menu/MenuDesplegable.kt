@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import com.bugbusters.randomspace.R
+import android.content.Intent
+import com.bugbusters.randomspace.ui.help.HelpActivity
 
 /**
  * Menú desplegable del botón de la hamburguesa, compartido por todas las pantallas.
@@ -35,9 +37,13 @@ object MenuDesplegable {
             popup.dismiss()
         }
 
-        // TODO: abrir la pantalla Ayuda (cuando exista HelpActivity)
+        // Pantalla Ayuda
         contenido.findViewById<View>(R.id.opcionAyuda).setOnClickListener {
             popup.dismiss()
+            // Si ya estamos en Ayuda no la abrimos otra vez encima
+            if (activity !is HelpActivity) {
+                activity.startActivity(Intent(activity, HelpActivity::class.java))
+            }
         }
 
         // Desplazamiento horizontal negativo: el borde derecho del menú coincide con el del botón
