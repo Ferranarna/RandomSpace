@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/bg_dark"
-    tools:context=".MainActivity">
+    tools:context=".ui.welcome.MainActivity">
 
     <!-- ========== BARRA MENU ========== -->
     <androidx.appcompat.widget.Toolbar

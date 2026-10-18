@@ -1,4 +1,4 @@
-package com.bugbusters.randomspace
+package com.bugbusters.randomspace.ui.welcome
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.bugbusters.randomspace.R
 
 /**
  * Pantalla de inicio de Random Space.

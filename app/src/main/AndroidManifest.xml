@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RandomSpace">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.welcome.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
