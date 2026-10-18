@@ -46,7 +46,7 @@
     <!-- Botones grandes (¡JUGAR!, HISTORIAL...): texto negro centrado, ancho completo y 56dp de alto -->
     <style name="BotonTitulo" parent="TextoTitulo">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_height">60dp</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">0dp</item>
