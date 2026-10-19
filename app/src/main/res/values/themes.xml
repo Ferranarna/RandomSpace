@@ -49,7 +49,7 @@
 
     <!-- Botones grandes (¡JUGAR!, HISTORIAL...) -->
     <style name="BotonTitulo" parent="TextoTitulo">
-        <item name="android:textSize">45sp</item>
+        <item name="android:textSize">50sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:textColor">@color/black</item>
@@ -221,6 +221,7 @@
     <!-- Título grande de la pantalla de resultado (¡VICTORIA!, DERROTA) -->
     <style name="TituloResultado" parent="TextoTitulo">
         <item name="android:textSize">80sp</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:gravity">center</item>
     </style>
 

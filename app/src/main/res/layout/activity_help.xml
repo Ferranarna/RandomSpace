@@ -28,15 +28,7 @@
         <View style="@style/Espaciador" />
 
         <!-- Título "CÓMO JUGAR" -->
-        <TextView
-            style="@style/TituloResultado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-10dp"
-            android:layout_marginBottom="-10dp"
-            android:text="@string/help_titulo"
-            android:textColor="@color/cyan" />
+        <include layout="@layout/titulo_pantalla" />
 
         <View style="@style/Espaciador" />
 

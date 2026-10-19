@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
+import android.widget.TextView
 
 /**
  * Pantalla de premios: tabla estática con el valor de cada combinación.
@@ -31,5 +32,8 @@ class PrizesActivity : AppCompatActivity() {
 
         // Botón VOLVER
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
+
+        // Título
+        findViewById<TextView>(R.id.tvTitulo).setText(R.string.premios_titulo)
     }
 }

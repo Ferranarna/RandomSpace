@@ -35,6 +35,12 @@ class DefeatActivity : AppCompatActivity() {
 
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
         mostrarDatos(puntuacion = "8", incremento = "+100", nuevoBote = "1.100")
+
+        // Título en rojo
+        findViewById<TextView>(R.id.tvTitulo).apply {
+            setText(R.string.derrota_titulo)
+            setTextColor(androidx.core.content.ContextCompat.getColor(this@DefeatActivity, R.color.red))
+        }
     }
 
     /**

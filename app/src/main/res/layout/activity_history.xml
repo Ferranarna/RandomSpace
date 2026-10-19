@@ -29,12 +29,7 @@
 
         <View style="@style/Espaciador" />
 
-        <TextView
-            style="@style/TituloResultado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/historial_titulo"
-            android:textColor="@color/cyan" />
+        <include layout="@layout/titulo_pantalla" />
 
         <View style="@style/Espaciador" />
 
@@ -42,7 +37,7 @@
         <LinearLayout
             style="@style/Panel"
             android:layout_height="0dp"
-            android:layout_weight="6">
+            android:layout_weight="25">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listaPartidas"

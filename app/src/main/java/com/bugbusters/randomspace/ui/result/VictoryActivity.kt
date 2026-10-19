@@ -35,6 +35,12 @@ class VictoryActivity : AppCompatActivity() {
 
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
         mostrarDatos(premio = "1.200")
+
+        // Título en verde
+        findViewById<TextView>(R.id.tvTitulo).apply {
+            setText(R.string.victoria_titulo)
+            setTextColor(androidx.core.content.ContextCompat.getColor(this@VictoryActivity, R.color.green))
+        }
     }
 
     /**

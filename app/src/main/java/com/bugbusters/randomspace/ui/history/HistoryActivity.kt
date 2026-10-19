@@ -2,6 +2,7 @@ package com.bugbusters.randomspace.ui.history
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -49,6 +50,9 @@ class HistoryActivity : AppCompatActivity() {
                 FilaHistorial("14/10/2026", "-600")
             )
         )
+
+        // Título
+        findViewById<TextView>(R.id.tvTitulo).setText(R.string.historial_titulo)
     }
 
     /**

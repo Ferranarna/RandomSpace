@@ -28,12 +28,7 @@
 
         <View style="@style/Espaciador" />
 
-        <TextView
-            style="@style/TituloResultado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/victoria_titulo"
-            android:textColor="@color/cyan" />
+        <include layout="@layout/titulo_pantalla" />
 
         <View style="@style/Espaciador" />
 
