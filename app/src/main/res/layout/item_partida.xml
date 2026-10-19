@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    item_partida.xml: una fila del historial (fecha a la izquierda, resultado con moneda a la derecha).
+    Lo rellena HistoryAdapter.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="6dp">
+
+    <TextView
+        android:id="@+id/tvFecha"
+        style="@style/TextoFecha"
+        tools:text="16/10/2026" />
+
+    <TextView
+        android:id="@+id/tvResultado"
+        style="@style/Texto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="+200" />
+
+    <ImageView style="@style/Moneda" />
+</LinearLayout>

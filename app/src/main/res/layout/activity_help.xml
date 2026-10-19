@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     activity_help.xml: pantalla de ayuda "CÓMO JUGAR" (estática, sin scroll).
-    Barra superior compartida, cuatro paneles de ayuda y botón VOLVER fijo abajo.
     Los textos con colores e iconos los rellena HelpActivity.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,19 +27,20 @@
 
         <View style="@style/Espaciador" />
 
-        <!-- Logo "CÓMO JUGAR" -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="78dp"
-            android:contentDescription="@null"
-            android:scaleType="fitCenter"
-            android:src="@drawable/logo_help" />
+        <!-- Título "CÓMO JUGAR" -->
+        <TextView
+            style="@style/TituloResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/help_titulo"
+            android:textColor="@color/cyan" />
 
         <View style="@style/Espaciador" />
 
         <!-- Panel 1: como jugar -->
         <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaAyuda">
+            <LinearLayout style="@style/ColumnaPanel">
                 <TextView android:id="@+id/tvAyudaMonedas" style="@style/TextoAyuda"
                     tools:text="EMPIEZAS CON 1000" />
             </LinearLayout>
@@ -50,7 +50,7 @@
 
         <!-- Panel 2: victoria -->
         <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaAyuda">
+            <LinearLayout style="@style/ColumnaPanel">
                 <TextView style="@style/TituloAyuda" android:text="@string/help_premio_titulo"
                     android:textColor="@color/green" />
                 <View style="@style/LineaTitulo" />
@@ -63,7 +63,7 @@
 
         <!-- Panel 3: derrota -->
         <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaAyuda">
+            <LinearLayout style="@style/ColumnaPanel">
                 <TextView style="@style/TituloAyuda" android:text="@string/help_fin_titulo"
                     android:textColor="@color/red" />
                 <View style="@style/LineaTitulo" />
@@ -76,7 +76,7 @@
 
         <!-- Panel 4: bote progresivo -->
         <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaAyuda">
+            <LinearLayout style="@style/ColumnaPanel">
                 <TextView style="@style/TituloAyuda" android:text="@string/help_bote_titulo"
                     android:textColor="@color/yellow" />
                 <View style="@style/LineaTitulo" />
@@ -103,7 +103,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVolver"
             style="@style/BotonTitulo"
-            android:background="@drawable/btn_volver"
-            android:text="@string/help_volver" />
+            android:background="@drawable/btn_cian"
+            android:text="@string/btn_volver" />
     </LinearLayout>
 </LinearLayout>

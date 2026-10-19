@@ -10,6 +10,7 @@ import android.widget.PopupWindow
 import com.bugbusters.randomspace.R
 import android.content.Intent
 import com.bugbusters.randomspace.ui.help.HelpActivity
+import com.bugbusters.randomspace.ui.prizes.PrizesActivity
 
 /**
  * Menú desplegable del botón de la hamburguesa, compartido por todas las pantallas.
@@ -32,17 +33,21 @@ object MenuDesplegable {
         // Fondo transparente: necesario para que se cierre al tocar fuera en todas las versiones
         popup.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        // TODO: abrir la pantalla Premios
-        contenido.findViewById<View>(R.id.opcionPremios).setOnClickListener {
-            popup.dismiss()
-        }
-
         // Pantalla Ayuda
         contenido.findViewById<View>(R.id.opcionAyuda).setOnClickListener {
             popup.dismiss()
             // Si ya estamos en Ayuda no la abrimos otra vez encima
             if (activity !is HelpActivity) {
                 activity.startActivity(Intent(activity, HelpActivity::class.java))
+            }
+        }
+
+        // Pantalla Premios
+        contenido.findViewById<View>(R.id.opcionPremios).setOnClickListener {
+            popup.dismiss()
+            // Si ya estamos en Premios no la abrimos otra vez encima
+            if (activity !is PrizesActivity) {
+                activity.startActivity(Intent(activity, PrizesActivity::class.java))
             }
         }
 

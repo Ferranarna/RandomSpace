@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_defeat.xml: pantalla de derrota (sin scroll).
+    Los datos que se ven aquí son de ejemplo: los rellena DefeatActivity.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_dark"
+    tools:context=".ui.result.DefeatActivity">
+
+    <!-- ========== BARRA SUPERIOR (compartida) ========== -->
+    <include layout="@layout/barra_superior" />
+
+    <!-- ========== CONTENIDO ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+        <View style="@style/Espaciador" />
+
+        <TextView
+            style="@style/TituloResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/derrota_titulo"
+            android:textColor="@color/red" />
+
+        <View style="@style/Espaciador" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:contentDescription="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_derrota" />
+
+        <View style="@style/Espaciador" />
+
+        <TextView
+            style="@style/SubtituloResultado"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/derrota_subtitulo" />
+
+        <View style="@style/Espaciador" />
+
+        <!-- Panel: el bote sube -->
+        <LinearLayout
+            style="@style/PanelMensaje"
+            android:orientation="vertical">
+
+            <ImageView
+                style="@style/IconoPanel"
+                android:layout_width="186dp"
+                android:layout_height="151dp"
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/ic_trofeo" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bote_sube"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tvIncremento"
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="+100" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nuevo_bote"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tvNuevoBote"
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="1.100" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View style="@style/Espaciador" />
+
+        <!-- Panel: puntuación guardada (contorno morado) -->
+        <LinearLayout
+            style="@style/PanelMensaje"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/panel_morado">
+
+            <ImageView
+                style="@style/IconoPanel"
+                android:layout_width="47dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_disquete" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/guardado"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tvPuntuacion"
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="8" />
+                <ImageView style="@style/Moneda" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View style="@style/Espaciador" />
+    </LinearLayout>
+
+    <!-- ========== BOTÓN VOLVER (fijo abajo) ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVolver"
+            style="@style/BotonTitulo"
+            android:background="@drawable/btn_cian"
+            android:text="@string/btn_volver" />
+    </LinearLayout>
+</LinearLayout>

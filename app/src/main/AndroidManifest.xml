@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RandomSpace">
         <activity
-            android:name=".ui.welcome.MainActivity"
+            android:name=".ui.name.NameActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -23,7 +23,31 @@
         </activity>
 
         <activity
+            android:name=".ui.welcome.MainActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.help.HelpActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.game.GameActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.result.VictoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.result.DefeatActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.history.HistoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.prizes.PrizesActivity"
             android:exported="false" />
     </application>
 
