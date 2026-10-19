@@ -7,8 +7,6 @@
     Se usan en los layouts con style="@style/NombreDelEstilo".
     Los estilos "hijo" (con parent) heredan lo del padre y solo cambian lo que añaden.
 
-    Fuentes:  pixel_font (texto normal) y pixel_title_font (títulos y botones).
-    Colores:  definidos en colors.xml.
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -34,17 +32,24 @@
         <item name="android:fontFamily">@font/pixel_title_font</item>
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textScaleX">0.8</item>
+        <item name="android:textScaleX">1</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!-- Título de la barra superior: igual que TextoTitulo pero más pequeño -->
-    <style name="TextoTituloBarra" parent="TextoTitulo">
+    <!-- Texto destacado con la fuente big (barra, menú, juego, subtítulos) -->
+    <style name="TextoBig" parent="TextoTitulo">
+        <item name="android:fontFamily">@font/pixel_big_font</item>
+        <item name="android:textScaleX">0.8</item>
+    </style>
+
+    <!-- Título de la barra superior -->
+    <style name="TextoTituloBarra" parent="TextoBig">
         <item name="android:textSize">25sp</item>
     </style>
 
     <!-- Botones grandes (¡JUGAR!, HISTORIAL...) -->
     <style name="BotonTitulo" parent="TextoTitulo">
+        <item name="android:textSize">45sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:textColor">@color/black</item>
@@ -101,13 +106,13 @@
     </style>
 
     <!-- ===== MENÚ DESPLEGABLE ===== -->
-    <style name="OpcionMenu" parent="TextoTitulo">
+    <style name="OpcionMenu" parent="TextoBig">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">21sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/btn_magenta</item>
         <item name="android:clickable">true</item>
@@ -133,7 +138,7 @@
 
     <!-- Título de cada panel de ayuda -->
     <style name="TituloAyuda" parent="TextoAyuda">
-        <item name="android:fontFamily">@font/pixel_title_font</item>
+        <item name="android:fontFamily">@font/pixel_big_font</item>
         <item name="android:textSize">22sp</item>
         <item name="android:textScaleX">0.8</item>
         <item name="android:gravity">center</item>
@@ -192,7 +197,7 @@
     </style>
 
     <!-- Botones + y - de la apuesta: cuadrados -->
-    <style name="BotonApuesta" parent="TextoTitulo">
+    <style name="BotonApuesta" parent="TextoBig">
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:minWidth">0dp</item>
@@ -206,7 +211,7 @@
     </style>
 
     <!-- Texto grande de la tirada (mensaje y resultado): mismo tamaño en los dos, en una sola línea -->
-    <style name="TextoJuego" parent="TextoTitulo">
+    <style name="TextoJuego" parent="TextoBig">
         <item name="android:textSize">21sp</item>
         <item name="android:textColor">@color/yellow</item>
         <item name="android:maxLines">1</item>
@@ -215,13 +220,13 @@
     <!-- ===== PANTALLAS DE VICTORIA Y DERROTA ===== -->
     <!-- Título grande de la pantalla de resultado (¡VICTORIA!, DERROTA) -->
     <style name="TituloResultado" parent="TextoTitulo">
-        <item name="android:textSize">44sp</item>
+        <item name="android:textSize">80sp</item>
         <item name="android:gravity">center</item>
     </style>
 
     <!-- Frase bajo la imagen (¡PREMIO GORDO!, SALDO INSUFICIENTE) -->
-    <style name="SubtituloResultado" parent="TextoTitulo">
-        <item name="android:textSize">26sp</item>
+    <style name="SubtituloResultado" parent="TextoBig">
+        <item name="android:textSize">25sp</item>
         <item name="android:gravity">center</item>
     </style>
 
