@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
 import com.bugbusters.randomspace.ui.welcome.MainActivity
+import android.text.InputFilter
 
 /**
  * Primera pantalla: el jugador escribe su nombre y pasa a la pantalla de inicio.
@@ -28,11 +29,17 @@ class NameActivity : AppCompatActivity() {
             insets
         }
 
+        // Fuerza mayúsculas al escribir, aunque el teclado no lo haga (15 = longitud máxima)
+        findViewById<EditText>(R.id.etNombre).filters = arrayOf(
+            InputFilter.AllCaps(),
+            InputFilter.LengthFilter(15)
+        )
+
         // TODO: si el jugador ya existe en la base de datos, saltar esta pantalla e ir directo al inicio
 
         // Botón ¡EMPEZAR!: comprueba que hay nombre y abre la pantalla de inicio
         findViewById<android.view.View>(R.id.btnEmpezar).setOnClickListener {
-            val nombre = findViewById<EditText>(R.id.etNombre).text.toString().trim()
+            val nombre = findViewById<EditText>(R.id.etNombre).text.toString().trim().uppercase()
             if (nombre.isEmpty()) {
                 Toast.makeText(this, R.string.nombre_vacio, Toast.LENGTH_SHORT).show()
             } else {

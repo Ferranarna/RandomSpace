@@ -38,16 +38,16 @@ class HistoryActivity : AppCompatActivity() {
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
         mostrarPartidas(
             listOf(
-                FilaHistorial("18/10/2026", "+200"),
-                FilaHistorial("18/10/2026", "-150"),
-                FilaHistorial("17/10/2026", "+10"),
-                FilaHistorial("17/10/2026", "-50"),
-                FilaHistorial("16/10/2026", "+500"),
-                FilaHistorial("16/10/2026", "-100"),
-                FilaHistorial("15/10/2026", "+30"),
-                FilaHistorial("15/10/2026", "-300"),
-                FilaHistorial("14/10/2026", "+1.500"),
-                FilaHistorial("14/10/2026", "-600")
+                FilaHistorial("20/10/2026", "+200"),
+                FilaHistorial("19/10/2026", "-150"),
+                FilaHistorial("19/10/2026", "+10"),
+                FilaHistorial("18/10/2026", "-50"),
+                FilaHistorial("18/10/2026", "+500"),
+                FilaHistorial("17/10/2026", "-100"),
+                FilaHistorial("17/10/2026", "+30"),
+                FilaHistorial("16/10/2026", "-300"),
+                FilaHistorial("16/10/2026", "+1.500"),
+                FilaHistorial("15/10/2026", "-600")
             )
         )
 

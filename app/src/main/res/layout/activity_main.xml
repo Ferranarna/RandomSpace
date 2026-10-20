@@ -49,37 +49,53 @@
         <!-- Panel usuario y saldo -->
         <LinearLayout style="@style/Panel">
 
-            <!-- Usuario -->
+            <!-- Usuario: "USER:" a la izquierda, nombre a la derecha -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="0dp">
 
                 <TextView
-                    style="@style/Texto"
-                    android:layout_width="wrap_content"
+                    style="@style/TextoJuego"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/user_titulo" />
+                    android:layout_weight="1"
+                    android:text="@string/user_titulo"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tvUsuario"
                     style="@style/Texto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="28dp"
                     android:textColor="@color/green"
                     tools:text="CYBER_GAMBLER" />
             </LinearLayout>
 
+            <!-- Saldo: "SALDO:" a la izquierda, cantidad y moneda a la derecha -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp">
+
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/saldo"
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/tvMonedas"
-                    style="@style/TextoMonedas"
+                    style="@style/Texto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1.000" />
@@ -94,10 +110,12 @@
             android:layout_marginTop="12dp">
 
             <TextView
-                style="@style/Texto"
+                style="@style/TextoJuego"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_marginBottom="3dp"
+                android:textColor="@color/white"
                 android:text="@string/tus_mejores_partidas" />
 
             <!-- Fila 1 -->

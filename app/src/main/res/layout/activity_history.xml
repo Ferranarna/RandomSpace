@@ -27,8 +27,6 @@
         android:paddingEnd="16dp"
         android:paddingBottom="8dp">
 
-        <View style="@style/Espaciador" />
-
         <include layout="@layout/titulo_pantalla" />
 
         <View style="@style/Espaciador" />

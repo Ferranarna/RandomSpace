@@ -18,7 +18,7 @@
     <!-- ===== TEXTO NORMAL (fuente pixel_font, 30sp, blanco) ===== -->
     <style name="Texto">
         <item name="android:fontFamily">@font/pixel_font</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">32sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -27,7 +27,7 @@
         <item name="android:textColor">@color/yellow</item>
     </style>
 
-    <!-- ===== TEXTO TÍTULO (fuente pixel_title_font, 30sp, blanco, estrechado) ===== -->
+    <!-- ===== TEXTO TÍTULO (fuente pixel_title_font, 30sp, blanco) ===== -->
     <style name="TextoTitulo">
         <item name="android:fontFamily">@font/pixel_title_font</item>
         <item name="android:textSize">30sp</item>
@@ -232,7 +232,7 @@
     </style>
 
     <!-- ===== PANTALLA DE PREMIOS ===== -->
-    <!-- Fila de la tabla: panel cian, reparte el alto con las demás filas -->
+    <!-- Fila de la tabla: panel morado, reparte el alto con las demás filas -->
     <style name="FilaPremio">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
@@ -242,41 +242,57 @@
         <item name="android:background">@drawable/panel_morado</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingStart">8dp</item>
         <item name="android:paddingEnd">8dp</item>
     </style>
 
-    <!-- Imagen de la combinación: casi todo el alto de la fila -->
+    <!-- Imagen de la combinación: a la izquierda, ocupa el alto de la fila -->
     <style name="ImagenPremio">
-        <item name="android:layout_width">88dp</item>
+        <item name="android:layout_width">130dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:paddingTop">2dp</item>
-        <item name="android:paddingBottom">2dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:contentDescription">@null</item>
     </style>
 
-    <!-- Nombre + (x1) juntos en una línea, ocupan el espacio que sobra -->
+    <!-- Bloque de texto: nombre arriba y valor debajo, centrados -->
     <style name="NombrePremio">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginStart">6dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Línea interior del bloque de texto -->
+    <style name="LineaPremio">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <!-- Texto del nombre y del (x1) -->
-    <style name="TextoPremio" parent="Texto">
+    <!-- Nombre de la combinación: blanco -->
+    <style name="TextoPremio" parent="TextoJuego">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">30sp</item>
-        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
-    <!-- Valor del premio (amarillo, o rojo si es pérdida) -->
-    <style name="ValorPremio" parent="TextoMonedas">
+    <!-- Valor del premio: amarillo, o rojo si es pérdida -->
+    <style name="ValorPremio" parent="TextoJuego">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Multiplicador (x1): verde -->
+    <style name="MultiplicadorPremio" parent="TextoJuego">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/green</item>
     </style>
 </resources>

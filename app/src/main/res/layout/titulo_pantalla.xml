@@ -2,7 +2,7 @@
 <!--
     titulo_pantalla.xml: título de pantalla con estrellas a los lados.
     Se usa con <include layout="@layout/titulo_pantalla" />.
-    El texto y el color los pone cada pantalla desde su Activity (tvTitulo).
+    El texto lo pone cada pantalla desde su Activity (tvTitulo); el color es blanco salvo que la pantalla lo cambie
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -15,6 +15,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
+        android:layout_marginBottom="-8dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/img_estrellas_izq" />
@@ -24,12 +25,14 @@
         style="@style/TituloResultado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="-8dp"
         tools:text="TÍTULO" />
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_weight="1"
+        android:layout_marginBottom="-8dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/img_estrellas_der" />

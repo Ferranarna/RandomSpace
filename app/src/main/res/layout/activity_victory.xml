@@ -57,53 +57,121 @@
             <ImageView
                 style="@style/IconoPanel"
                 android:layout_width="186dp"
-                android:layout_height="151dp"
+                android:layout_height="121dp"
                 android:layout_marginEnd="0dp"
                 android:src="@drawable/ic_trofeo" />
+
             <TextView
                 style="@style/TextoJuego"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/victoria_ganado"
                 android:textColor="@color/white" />
+
+            <!-- 1.000 [moneda] x3 = -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvBoteBase"
+                    style="@style/Texto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/yellow"
+                    tools:text="1.000" />
+                <ImageView style="@style/Moneda" />
+                <TextView
+                    android:id="@+id/tvMultiplicador"
+                    style="@style/Texto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/green"
+                    tools:text="x3" />
+
+                <TextView
+                    style="@style/Texto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/igual"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <!-- 3.000 [moneda] -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tvPremio"
                     style="@style/TextoJuego"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="1.200" />
+                    tools:text="3.000" />
                 <ImageView style="@style/Moneda" />
             </LinearLayout>
         </LinearLayout>
 
         <View style="@style/Espaciador" />
 
-        <!-- Panel: récord guardado -->
+        <!-- Panel: saldo final y guardado (contorno morado) -->
         <LinearLayout
             style="@style/PanelMensaje"
-            android:layout_marginTop="8dp"
             android:background="@drawable/panel_morado">
 
+            <!-- Disquete -->
             <ImageView
-                style="@style/IconoPanel"
-                android:layout_width="47dp"
-                android:layout_height="53dp"
-                android:layout_marginStart="12dp"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_disquete" />
-            <TextView
-                style="@style/TextoJuego"
-                android:layout_width="0dp"
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/record_guardado"
-                android:textColor="@color/white" />
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/saldo_final"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvSaldo"
+                        style="@style/TextoJuego"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="4.000" />
+                    <ImageView style="@style/Moneda" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/guardado"
+                    android:textColor="@color/white" />
+            </LinearLayout>
         </LinearLayout>
 
         <View style="@style/Espaciador" />

@@ -34,7 +34,7 @@ class DefeatActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
 
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
-        mostrarDatos(puntuacion = "8", incremento = "+100", nuevoBote = "1.100")
+        mostrarDatos(boteBase = "1.300", incremento = "+100", nuevoBote = "1.400", saldo = "8")
 
         // Título en rojo
         findViewById<TextView>(R.id.tvTitulo).apply {
@@ -44,13 +44,20 @@ class DefeatActivity : AppCompatActivity() {
     }
 
     /**
-     * @param puntuacion monedas conseguidas en la partida (ya formateado)
+     * Rellena los números de la pantalla. Los textos fijos están en strings.xml.
+     *
+     * @param boteBase bote antes de perder (ya formateado, p. ej. "1.000")
      * @param incremento lo que sube el bote, con signo (p. ej. "+100")
      * @param nuevoBote bote resultante (ya formateado)
+     * @param saldo saldo del jugador (ya formateado)
      */
-    private fun mostrarDatos(puntuacion: String, incremento: String, nuevoBote: String) {
-        findViewById<TextView>(R.id.tvPuntuacion).text = puntuacion
+    private fun mostrarDatos(
+        boteBase: String, incremento: String, nuevoBote: String,
+        saldo: String
+    ) {
+        findViewById<TextView>(R.id.tvBoteBase).text = boteBase
         findViewById<TextView>(R.id.tvIncremento).text = incremento
         findViewById<TextView>(R.id.tvNuevoBote).text = nuevoBote
+        findViewById<TextView>(R.id.tvSaldo).text = saldo
     }
 }

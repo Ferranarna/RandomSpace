@@ -76,14 +76,21 @@
                 android:src="@drawable/rodillo_jupiter" />
         </LinearLayout>
 
-        <!-- Resultado de la tirada, p. ej. "+200" con moneda -->
+        <!-- Resultado de la tirada: "GANASTE: +200 [moneda]" o "PERDISTE: -150 [moneda]" -->
         <LinearLayout style="@style/PanelMensaje">
+            <TextView
+                android:id="@+id/tvResultadoTitulo"
+                style="@style/TextoJuego"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                tools:text="GANASTE: " />
             <TextView
                 android:id="@+id/tvResultado"
                 style="@style/TextoJuego"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="GANASTE +200" />
+                tools:text="+200" />
             <ImageView style="@style/Moneda" />
         </LinearLayout>
 
@@ -111,15 +118,17 @@
                 android:gravity="center"
                 android:orientation="horizontal">
                 <TextView
+                    style="@style/TextoJuego"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saldo"
+                    android:textColor="@color/white" />
+                <TextView
+                    android:id="@+id/tvSaldo"
                     style="@style/Texto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tienes_titulo" />
-                <TextView
-                    android:id="@+id/tvSaldo"
-                    style="@style/TextoMonedas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:textColor="@color/yellow"
                     tools:text="1.200" />
                 <ImageView style="@style/Moneda" />
             </LinearLayout>

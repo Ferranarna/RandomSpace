@@ -6,7 +6,7 @@
     <string name="app_name">RANDOM SPACE</string>
     <string name="bote_titulo">"BOTE: "</string>
     <string name="user_titulo">"USER: "</string>
-    <string name="tus_mejores_partidas">TUS MEJORES PARTIDAS:</string>
+    <string name="tus_mejores_partidas">TOP PARTIDAS:</string>
     <string name="btn_jugar">¡JUGAR!</string>
     <string name="btn_historial">HISTORIAL</string>
 
@@ -33,18 +33,35 @@
     <string name="btn_mas">+</string>
     <string name="btn_menos">-</string>
     <string name="btn_girar">¡GIRAR!</string>
-    <string name="tienes_titulo">"TIENES "</string>
+    <string name="tienes_titulo">"TIENES: "</string>
+    <string name="resultado_ganaste">"GANASTE: "</string>
+    <string name="resultado_perdiste">"PERDISTE: "</string>
+    <string name="resultado_empate">"SIN CAMBIOS"</string>
+    <string name="combo_premio_gordo">¡PREMIO GORDO!</string>
+    <string name="combo_alineacion">¡ALINEACIÓN!</string>
+    <string name="combo_trio_planetario">¡TRÍO PLANETARIO!</string>
+    <string name="combo_aperitivo">¡APERITIVO!</string>
+    <string name="combo_lluvia_estrellas">¡LLUVIA DE ESTRELLAS!</string>
+    <string name="combo_doble">¡DOBLE!</string>
+    <string name="combo_invasion">¡INVASIÓN ALIENÍGENA!</string>
+    <string name="combo_quemamos">¡NOS QUEMAMOS!</string>
+    <string name="combo_persiguen">¡NOS PERSIGUEN!</string>
+    <string name="combo_calor">¡QUÉ CALOR!</string>
+    <string name="combo_atacan">¡NOS ATACAN!</string>
+    <string name="combo_sigue">¡SIGUE EXPLORANDO!</string>
 
     <!-- Pantallas de victoria y derrota -->
     <string name="victoria_titulo">¡VICTORIA!</string>
     <string name="victoria_subtitulo">¡PREMIO GORDO!</string>
     <string name="victoria_ganado">HAS GANADO EL BOTE:</string>
-    <string name="record_guardado">RÉCORD GUARDADO</string>
+    <string name="derrota_titulo_bote">EL BOTE SUBE:</string>
+    <string name="multiplicador">x%1$d</string>
+    <string name="igual">" ="</string>
+    <string name="saldo_final">"SALDO FINAL:"</string>
+    <string name="guardado">¡GUARDADO!</string>
     <string name="derrota_titulo">DERROTA</string>
     <string name="derrota_subtitulo">SALDO INSUFICIENTE</string>
-    <string name="guardado">"GUARDADO: "</string>
-    <string name="bote_sube">"EL BOTE SUBE "</string>
-    <string name="nuevo_bote">"NUEVO BOTE: "</string>
+    <string name="saldo">"SALDO: "</string>
 
     <!-- Pantalla de historial -->
     <string name="historial_titulo">HISTORIAL</string>

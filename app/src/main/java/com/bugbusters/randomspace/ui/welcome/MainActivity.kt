@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity() {
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
         mostrarDatos(
             usuario = intent.getStringExtra("nombre") ?: "CYBER_GAMBLER",
-            monedas = "1.000",
-            bote = "10.000",
-            fechas = listOf("16/10/2026", "15/10/2026", "14/10/2026", "13/10/2026", "12/10/2026"),
-            puntos = listOf("3.500", "2.800", "2.100", "900", "750")
+            monedas = "1.200",
+            bote = "1.300",
+            fechas = listOf("19/10/2026", "18/10/2026", "17/10/2026", "16/10/2026", "15/10/2026"),
+            puntos = listOf("5.100", "3.500", "2.800", "2.100", "900")
         )
 
         // Botón ¡JUGAR!: abre la pantalla de juego

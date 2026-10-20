@@ -34,7 +34,7 @@ class VictoryActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
 
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
-        mostrarDatos(premio = "1.200")
+        mostrarDatos(boteBase = "1.300", multiplicador = 3, premio = "3.900", saldo = "5.100")
 
         // Título en verde
         findViewById<TextView>(R.id.tvTitulo).apply {
@@ -44,9 +44,21 @@ class VictoryActivity : AppCompatActivity() {
     }
 
     /**
-     * @param premio bote ganado (ya formateado, p. ej. "1.200")
+     * Rellena los números de la pantalla. Los textos fijos están en strings.xml.
+     *
+     * @param boteBase bote antes de multiplicar (ya formateado, p. ej. "1.000")
+     * @param multiplicador apuesta / 10 (1, 2 o 3)
+     * @param premio boteBase x multiplicador (ya formateado, p. ej. "3.000")
+     * @param guardado puntuación guardada (ya formateada)
+     * @param saldo saldo del jugador (ya formateado)
      */
-    private fun mostrarDatos(premio: String) {
+    private fun mostrarDatos(
+        boteBase: String, multiplicador: Int, premio: String,
+        saldo: String
+    ) {
+        findViewById<TextView>(R.id.tvBoteBase).text = boteBase
+        findViewById<TextView>(R.id.tvMultiplicador).text = getString(R.string.multiplicador, multiplicador)
         findViewById<TextView>(R.id.tvPremio).text = premio
+        findViewById<TextView>(R.id.tvSaldo).text = saldo
     }
 }

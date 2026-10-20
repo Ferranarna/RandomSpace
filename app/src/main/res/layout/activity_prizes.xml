@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     activity_prizes.xml: tabla de premios (estática, sin scroll).
-    Cada fila: imagen, nombre + (x1) en verde y, a la derecha, valor con moneda.
+    Cada fila: imagen a la izquierda y, a la derecha, nombre arriba y valor con moneda y (x1) debajo, centrados.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,8 +27,6 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
-        <View style="@style/Espaciador" android:layout_weight="0.3" />
-
         <include
             layout="@layout/titulo_pantalla"
             android:layout_width="match_parent"
@@ -40,96 +38,128 @@
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_3_burgers" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_3_burgers" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_3_burgers" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="@string/premio_bote" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="@string/premio_bote" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 3 alineados -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_3_alineados" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_3_alineados" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_3_alineados" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="500" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="500" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 3 planetas -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_3_planetas" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_3_planetas" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_3_planetas" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="250" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="250" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 2 burgers -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_2_burgers" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_2_burgers" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_2_burgers" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="200" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="200" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 3 estrellas -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_3_estrellas" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_3_estrellas" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_3_estrellas" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="50" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="50" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 2 planetas -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_2_planetas" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_2_planetas" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_2_planetas" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="10" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="10" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 3 ovnis/soles: pérdida -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_3_soles" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_3_ovnis_soles" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_3_ovnis_soles" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="-200"
+                        android:textColor="@color/red" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="-200"
-                android:textColor="@color/red" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
 
         <!-- 2 ovnis/soles: pérdida -->
         <LinearLayout style="@style/FilaPremio">
             <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_2_ovnis" />
             <LinearLayout style="@style/NombrePremio">
-                <TextView style="@style/TextoPremio" android:text="@string/premio_2_ovnis_soles" />
-                <TextView style="@style/TextoPremio" android:text="@string/premio_x1" android:textColor="@color/green" />
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_2_ovnis_soles" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/ValorPremio" android:text="-100"
+                        android:textColor="@color/red" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
             </LinearLayout>
-            <TextView style="@style/ValorPremio" android:text="-100"
-                android:textColor="@color/red" tools:ignore="HardcodedText" />
-            <ImageView style="@style/Moneda" />
         </LinearLayout>
+
         <View style="@style/Espaciador" android:layout_weight="0.3" />
     </LinearLayout>
 
     <!-- ========== BOTÓN VOLVER (fijo abajo) ========== -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
