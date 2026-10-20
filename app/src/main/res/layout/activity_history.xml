@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_history.xml: pantalla de historial de partidas.
+    Barra superior compartida, título, lista de partidas y botón VOLVER fijo abajo.
+    La lista es la única parte con scroll de toda la app, porque puede tener muchas partidas.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_dark"
+    tools:context=".ui.history.HistoryActivity">
+
+    <!-- ========== BARRA SUPERIOR (compartida) ========== -->
+    <include layout="@layout/barra_superior" />
+
+    <!-- ========== CONTENIDO ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+        <include layout="@layout/titulo_pantalla" />
+
+        <View style="@style/Espaciador" />
+
+        <!-- Panel con la lista: ocupa el espacio que sobra y la lista hace scroll dentro -->
+        <LinearLayout
+            style="@style/Panel"
+            android:layout_height="0dp"
+            android:layout_weight="25">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listaPartidas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/item_partida" />
+        </LinearLayout>
+
+        <View style="@style/Espaciador" />
+    </LinearLayout>
+
+    <!-- ========== BOTÓN VOLVER (fijo abajo) ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnVolver"
+            style="@style/BotonTitulo"
+            android:background="@drawable/btn_cian"
+            android:text="@string/btn_volver" />
+    </LinearLayout>
+</LinearLayout>

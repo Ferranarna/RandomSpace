@@ -5,10 +5,8 @@
     Aquí se define cómo se ve cada tipo de elemento (texto, botones, paneles...)
     para no repetir tamaño, fuente y color en cada pantalla.
     Se usan en los layouts con style="@style/NombreDelEstilo".
-    Los estilos "hijo" (con parent) heredan todo lo del padre y solo cambian lo que añaden.
+    Los estilos "hijo" (con parent) heredan lo del padre y solo cambian lo que añaden.
 
-    Fuentes:  pixel_font (texto normal) y pixel_title_font (títulos y botones).
-    Colores:  definidos en colors.xml.
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -20,7 +18,7 @@
     <!-- ===== TEXTO NORMAL (fuente pixel_font, 30sp, blanco) ===== -->
     <style name="Texto">
         <item name="android:fontFamily">@font/pixel_font</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textSize">32sp</item>
         <item name="android:textColor">@color/white</item>
     </style>
 
@@ -29,22 +27,29 @@
         <item name="android:textColor">@color/yellow</item>
     </style>
 
-    <!-- ===== TEXTO TÍTULO (fuente pixel_title_font, 30sp, blanco, estrechado) ===== -->
+    <!-- ===== TEXTO TÍTULO (fuente pixel_title_font, 30sp, blanco) ===== -->
     <style name="TextoTitulo">
         <item name="android:fontFamily">@font/pixel_title_font</item>
         <item name="android:textSize">30sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textScaleX">0.8</item>
+        <item name="android:textScaleX">1</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!-- Título de la barra superior: igual que TextoTitulo pero más pequeño -->
-    <style name="TextoTituloBarra" parent="TextoTitulo">
+    <!-- Texto destacado con la fuente big (barra, menú, juego, subtítulos) -->
+    <style name="TextoBig" parent="TextoTitulo">
+        <item name="android:fontFamily">@font/pixel_big_font</item>
+        <item name="android:textScaleX">0.8</item>
+    </style>
+
+    <!-- Título de la barra superior -->
+    <style name="TextoTituloBarra" parent="TextoBig">
         <item name="android:textSize">25sp</item>
     </style>
 
-    <!-- Botones grandes (¡JUGAR!, HISTORIAL...): texto negro centrado, ancho completo y 56dp de alto -->
+    <!-- Botones grandes (¡JUGAR!, HISTORIAL...) -->
     <style name="BotonTitulo" parent="TextoTitulo">
+        <item name="android:textSize">50sp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:textColor">@color/black</item>
@@ -101,16 +106,211 @@
     </style>
 
     <!-- ===== MENÚ DESPLEGABLE ===== -->
-    <style name="OpcionMenu" parent="TextoTitulo">
+    <style name="OpcionMenu" parent="TextoBig">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_marginTop">4dp</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">21sp</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@drawable/btn_opcion_menu</item>
+        <item name="android:background">@drawable/btn_magenta</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
+    </style>
+
+    <!-- ===== PANTALLA DE AYUDA ===== -->
+    <!-- Panel de ayuda -->
+    <style name="PanelAyuda" parent="Panel">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginTop">4dp</item>
+    </style>
+
+    <!-- Texto de ayuda -->
+    <style name="TextoAyuda" parent="Texto">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Título de cada panel de ayuda -->
+    <style name="TituloAyuda" parent="TextoAyuda">
+        <item name="android:fontFamily">@font/pixel_big_font</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textScaleX">0.8</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+    <!-- Icono de un panel -->
+    <style name="IconoPanel">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- Columna de texto de un panel (ocupa el ancho que deja el icono) -->
+    <style name="ColumnaPanel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Línea fina bajo el título de cada panel de ayuda -->
+    <style name="LineaTitulo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:background">@color/purple</item>
+    </style>
+
+    <!-- ===== PANTALLA DE JUEGO ===== -->
+    <!-- Panel con borde cian, contenido centrado en horizontal (mensaje y resultado) -->
+    <style name="PanelMensaje">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/panel_cian</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <!-- Imagen de un rodillo: ocupa un tercio del ancho del contenedor -->
+    <style name="Rodillo">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- Botones + y - de la apuesta: cuadrados -->
+    <style name="BotonApuesta" parent="TextoBig">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/btn_magenta</item>
+    </style>
+
+    <!-- Texto grande de la tirada (mensaje y resultado): mismo tamaño en los dos, en una sola línea -->
+    <style name="TextoJuego" parent="TextoBig">
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/yellow</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <!-- ===== PANTALLAS DE VICTORIA Y DERROTA ===== -->
+    <!-- Título grande de la pantalla de resultado (¡VICTORIA!, DERROTA) -->
+    <style name="TituloResultado" parent="TextoTitulo">
+        <item name="android:textSize">80sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- Frase bajo la imagen (¡PREMIO GORDO!, SALDO INSUFICIENTE) -->
+    <style name="SubtituloResultado" parent="TextoBig">
+        <item name="android:textSize">25sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <!-- ===== PANTALLA DE PREMIOS ===== -->
+    <!-- Fila de la tabla: panel morado, reparte el alto con las demás filas -->
+    <style name="FilaPremio">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:background">@drawable/panel_morado</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <!-- Imagen de la combinación: a la izquierda, ocupa el alto de la fila -->
+    <style name="ImagenPremio">
+        <item name="android:layout_width">130dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <!-- Bloque de texto: nombre arriba y valor debajo, centrados -->
+    <style name="NombrePremio">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <!-- Línea interior del bloque de texto -->
+    <style name="LineaPremio">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <!-- Nombre de la combinación: blanco -->
+    <style name="TextoPremio" parent="TextoJuego">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <!-- Valor del premio: amarillo, o rojo si es pérdida -->
+    <style name="ValorNumero" parent="TextoJuego">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Número del premio -->
+    <style name="NumeroPremio" parent="TextoMonedas">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginBottom">2dp</item>
+    </style>
+
+    <!-- Multiplicador (x1)-->
+    <style name="MultiplicadorPremio" parent="Texto">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">32dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
     </style>
 </resources>

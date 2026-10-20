@@ -1,24 +1,24 @@
 package com.bugbusters.randomspace.ui.welcome
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.PopupWindow
-import android.view.ViewGroup
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.bugbusters.randomspace.R
+import com.bugbusters.randomspace.ui.menu.MenuDesplegable
+import android.content.Intent
+import com.bugbusters.randomspace.ui.game.GameActivity
+import com.bugbusters.randomspace.ui.history.HistoryActivity
 
 /**
  * Pantalla de inicio de Random Space.
  *
- * Muestra el bote, el usuario con sus monedas y sus 3 mejores partidas,
+ * Muestra el bote, el usuario con sus monedas y sus 5 mejores partidas,
  * y da acceso a las pantallas de juego e historial y al menú de opciones.
  */
 class MainActivity : AppCompatActivity() {
@@ -44,63 +44,30 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
         mostrarDatos(
-            usuario = "CYBER_GAMBLER", monedas = "1.000", bote = "10.000",
-            fechas = listOf("16/10/2026", "15/10/2026", "14/10/2026"),
-            puntos = listOf("3.500", "2.800", "2.100")
+            usuario = intent.getStringExtra("nombre") ?: "CYBER_GAMBLER",
+            monedas = "1.200",
+            bote = "1.300",
+            fechas = listOf("19/10/2026", "18/10/2026", "17/10/2026", "16/10/2026", "15/10/2026"),
+            puntos = listOf("5.100", "3.500", "2.800", "2.100", "900")
         )
 
-        // TODO: Botón ¡JUGAR!: abrirá la pantalla de juego (temporal)
+        // Botón ¡JUGAR!: abre la pantalla de juego
         findViewById<View>(R.id.btnJugar).setOnClickListener {
-            Toast.makeText(this, "Jugar", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, GameActivity::class.java))
         }
 
-        // TODO: Botón HISTORIAL: abrirá el registro de partidas jugadas (temporal)
+        // Botón HISTORIAL: abre el registro de partidas jugadas
         findViewById<View>(R.id.btnHistorial).setOnClickListener {
-            Toast.makeText(this, "Historial", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
 
         // Botón de menú (hamburguesa de la derecha): despliega el menú de opciones
-        findViewById<View>(R.id.btnMenu).setOnClickListener { v -> mostrarMenu(v) }
-    }
-
-    /**
-     * Muestra el menú desplegable (layout popup_menu.xml) bajo el botón de menú,
-     * alineado a su borde derecho. Se cierra al elegir una opción o al tocar fuera.
-     *
-     * @param anchor vista bajo la que aparece el menú (el botón de la hamburguesa)
-     */
-    private fun mostrarMenu(anchor: View) {
-        val densidad = resources.displayMetrics.density
-        val ancho = (220 * densidad).toInt()
-
-        val contenido = layoutInflater.inflate(R.layout.popup_menu, null)
-        val popup = PopupWindow(contenido, ancho, ViewGroup.LayoutParams.WRAP_CONTENT, true)
-        // Fondo transparente: necesario para que se cierre al tocar fuera en todas las versiones
-        popup.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
-        // TODO: abrir la pantalla Premios
-        contenido.findViewById<View>(R.id.opcionPremios).setOnClickListener {
-            popup.dismiss()
-        }
-
-        // TODO: abrir la pantalla Ayuda
-        contenido.findViewById<View>(R.id.opcionAyuda).setOnClickListener {
-            popup.dismiss()
-        }
-
-        // Desplazamiento horizontal negativo: el borde derecho del menú coincide con el del botón
-        popup.showAsDropDown(anchor, anchor.width - ancho, (8 * densidad).toInt())
+        findViewById<View>(R.id.btnMenu).setOnClickListener { v -> MenuDesplegable.mostrar(this, v) }
     }
 
     /**
      * Rellena la pantalla con los datos recibidos.
      * Solo cambia textos: el diseño está en activity_main.xml.
-     *
-     * @param usuario nombre del jugador
-     * @param monedas saldo del jugador (ya formateado, p. ej. "1.000")
-     * @param bote bote actual (ya formateado)
-     * @param fechas fechas de las mejores partidas, de mejor a peor (máx. 3)
-     * @param puntos puntuaciones de esas partidas, en el mismo orden que las fechas
      */
     private fun mostrarDatos(
         usuario: String, monedas: String, bote: String,
@@ -110,12 +77,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvMonedas).text = monedas
         findViewById<TextView>(R.id.tvBote).text = bote
 
-        // Las 3 filas de "tus mejores partidas": si hay menos de 3 datos, la fila queda vacía
-        val tvFechas = listOf(R.id.tvFecha1, R.id.tvFecha2, R.id.tvFecha3)
-        val tvPuntos = listOf(R.id.tvPuntos1, R.id.tvPuntos2, R.id.tvPuntos3)
-        for (i in 0..2) {
+        // Las filas de "tus mejores partidas"
+        val tvFechas = listOf(R.id.tvFecha1, R.id.tvFecha2, R.id.tvFecha3, R.id.tvFecha4, R.id.tvFecha5)
+        val tvPuntos = listOf(R.id.tvPuntos1, R.id.tvPuntos2, R.id.tvPuntos3, R.id.tvPuntos4, R.id.tvPuntos5)
+        for (i in 0..4) {
             findViewById<TextView>(tvFechas[i]).text = fechas.getOrElse(i) { "" }
-            findViewById<TextView>(tvPuntos[i]).text = puntos.getOrElse(i) { "" }
+            val tvPunto = findViewById<TextView>(tvPuntos[i])
+            tvPunto.text = puntos.getOrElse(i) { "" }
+            // El número y su moneda están en el mismo contenedor: se oculta el contenedor entero
+            // (INVISIBLE mantiene el hueco para que las filas no se muevan)
+            (tvPunto.parent as View).visibility =
+                if (i < puntos.size) View.VISIBLE else View.INVISIBLE
         }
     }
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_name.xml: primera pantalla, donde el jugador escribe su nombre (sin scroll).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_dark"
+    tools:context=".ui.name.NameActivity">
+
+    <!-- ========== CONTENIDO ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <View style="@style/Espaciador" />
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_random_space" />
+
+        <View style="@style/Espaciador" />
+
+        <TextView
+            style="@style/TextoJuego"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nombre_titulo"
+            android:textColor="@color/white" />
+
+        <!-- Campo de texto donde se escribe el nombre -->
+        <EditText
+            android:id="@+id/etNombre"
+            style="@style/Texto"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/panel_magenta"
+            android:gravity="center"
+            android:hint="@string/nombre_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:textColor="@color/green"
+            android:textColorHint="@color/purple" />
+
+        <View style="@style/Espaciador" />
+        <View style="@style/Espaciador" />
+    </LinearLayout>
+
+    <!-- ========== BOTÓN EMPEZAR (fijo abajo) ========== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnEmpezar"
+            style="@style/BotonTitulo"
+            android:background="@drawable/btn_verde"
+            android:text="@string/btn_empezar" />
+    </LinearLayout>
+</LinearLayout>
