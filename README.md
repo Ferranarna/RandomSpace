@@ -66,23 +66,43 @@ RandomSpace/
 └── settings.gradle.kts   Módulos del proyecto
 ```
 
-## Arquitectura del código
-
 El código vive en `app/src/main/java/com/bugbusters/randomspace/` y se organiza **por capas**. Cada carpeta contiene un `explicacion.md` que describe qué va dentro y qué tipo de archivos.
 
 ```
 com/bugbusters/randomspace/
-├── ui/                  Interfaz: lo que el jugador ve y toca│   ├── name/            Primera pantalla: pide el nombre│   ├── welcome/         Inicio: bote, saldo y mejores partidas│   ├── game/            Partida: rodillos, apuesta y resultado│   ├── result/          Victoria y derrota│   ├── history/         Historial de partidas│   ├── prizes/          Tabla de premios│   ├── help/            Ayuda con las reglas│   └── menu/            Menú desplegable compartido
+├── ui/                  Interfaz: lo que el jugador ve y toca
+│   ├── name/            Primera pantalla: pide el nombre
+│   ├── welcome/         Inicio: bote, saldo y mejores partidas
+│   ├── game/            Partida: rodillos, apuesta y resultado
+│   ├── result/          Victoria y derrota
+│   ├── history/         Historial de partidas
+│   ├── prizes/          Tabla de premios
+│   ├── help/            Ayuda con las reglas
+│   └── menu/            Menú desplegable compartido
 ├── game/                Lógica del juego de azar (sin dependencias de Android)
 ├── model/               Clases de datos: jugador, partida, puntuación
 └── data/                Guardar y recuperar información
     ├── local/           SQLite
-    └── repository/      Puerta de entrada a los datos (RxJava)app/src/main/res/└── res/                        Diseño y textos    ├── drawable/               Imágenes y fondos de botones y paneles    ├── font/                   Fuentes pixel    ├── layout/                 Un XML por pantalla y layouts compartidos (barra_superior, cartel_bote, titulo_pantalla)    ├── mipmap-*/               Icono de la app    ├── values/              │   ├── themes/themes.xml   Tema y estilos (fuente, tamaño, color)    │   ├── colors.xml          Colores    │   └── strings.xml         Todos los textos    └── xml/                    Reglas de copia de seguridad (generado por Android Studio)
+    └── repository/      Puerta de entrada a los datos (RxJava)
+```
+
+Los recursos están en `app/src/main/res/`:
+
+```
+res/
+├── drawable/        Imágenes y fondos de botones y paneles
+├── font/            Fuentes pixel
+├── layout/          Un XML por pantalla y layouts compartidos (barra_superior, cartel_bote, titulo_pantalla)
+├── mipmap-*/        Icono de la app
+├── values/          Textos, colores y estilos
+│   ├── colors.xml   Colores
+│   ├── strings.xml  Todos los textos
+│   └── themes.xml   Tema y estilos (fuente, tamaño, color)
+└── xml/             Reglas de copia de seguridad (generado por Android Studio)
 ```
 
 - Los textos visibles van siempre en `strings.xml`, nunca escritos en el código o el layout.
 - Los tamaños y fuentes se definen en `themes.xml`, no en cada vista.
-
 ### Regla de dependencias
 
 ```
