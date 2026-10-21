@@ -92,7 +92,7 @@ Los recursos están en `app/src/main/res/`:
 res/
 ├── drawable/        Imágenes y fondos de botones y paneles
 ├── font/            Fuentes pixel
-├── layout/          Un XML por pantalla y layouts compartidos (barra_superior, cartel_bote, titulo_pantalla)
+├── layout/          Un XML por pantalla y layouts compartidos 
 ├── mipmap-*/        Icono de la app
 ├── values/          Textos, colores y estilos
 │   ├── colors.xml   Colores
