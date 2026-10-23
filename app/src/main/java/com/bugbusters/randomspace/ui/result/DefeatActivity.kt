@@ -1,5 +1,5 @@
 package com.bugbusters.randomspace.ui.result
-
+import com.bugbusters.randomspace.ui.game.GameActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -33,8 +33,15 @@ class DefeatActivity : AppCompatActivity() {
         // Botón VOLVER: cierra la pantalla
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
 
-        // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
-        mostrarDatos(boteBase = "1.300", incremento = "+100", nuevoBote = "1.400", saldo = "8")
+        // Datos que manda GameActivity al perder
+        val boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0)
+        val nuevoBote = intent.getIntExtra(GameActivity.EXTRA_NUEVO_BOTE, 0)
+        mostrarDatos(
+            boteBase = GameActivity.formatear(boteBase),
+            incremento = GameActivity.formatearConSigno(nuevoBote - boteBase),
+            nuevoBote = GameActivity.formatear(nuevoBote),
+            saldo = GameActivity.formatear(intent.getIntExtra(GameActivity.EXTRA_SALDO, 0))
+        )
 
         // Título en rojo
         findViewById<TextView>(R.id.tvTitulo).apply {

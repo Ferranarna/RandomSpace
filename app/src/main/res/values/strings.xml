@@ -49,6 +49,7 @@
     <string name="combo_calor">¡QUÉ CALOR!</string>
     <string name="combo_atacan">¡NOS ATACAN!</string>
     <string name="combo_sigue">¡SIGUE EXPLORANDO!</string>
+    <string name="mensaje_bienvenida">¡BIENVENIDO! PULSA GIRAR</string>
 
     <!-- Pantallas de victoria y derrota -->
     <string name="victoria_titulo">¡VICTORIA!</string>

@@ -1,22 +1,34 @@
 package com.bugbusters.randomspace.ui.game
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
+import com.bugbusters.randomspace.game.ResultadoTirada
+import com.bugbusters.randomspace.game.Tragaperras
+import com.bugbusters.randomspace.model.EstadoPartida
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
-import androidx.core.content.ContextCompat
+import com.bugbusters.randomspace.ui.result.DefeatActivity
+import com.bugbusters.randomspace.ui.result.VictoryActivity
+import java.util.Locale
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
- * De momento solo tiene el diseño; la lógica del juego se conecta en los TODO.
+ * Toda la lógica está en game/Tragaperras; esta pantalla solo la usa y pinta el resultado.
  */
 class GameActivity : AppCompatActivity() {
+
+    // TODO: cuando exista la BD, crear la tragaperras con el saldo y el bote guardados
+    private val tragaperras = Tragaperras()
+
+    private lateinit var rodillos: List<ImageView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,62 +45,104 @@ class GameActivity : AppCompatActivity() {
         // Botón de menú de la barra superior
         findViewById<View>(R.id.btnMenu).setOnClickListener { v -> MenuDesplegable.mostrar(this, v) }
 
-        // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
-        mostrarDatos(
-            bote = "1.300", saldo = "1.200", apuesta = "10",
-            mensaje = R.string.combo_aperitivo,
-            resultado = "+200"
+        rodillos = listOf(
+            findViewById(R.id.rodillo1),
+            findViewById(R.id.rodillo2),
+            findViewById(R.id.rodillo3)
         )
-        // TODO: subir la apuesta (temporal)
+
+        // Botones + y -: la tragaperras decide si se puede cambiar la apuesta
         findViewById<View>(R.id.btnMas).setOnClickListener {
-            Toast.makeText(this, "+", Toast.LENGTH_SHORT).show()
+            tragaperras.aumentarApuesta()
+            actualizarMarcadores()
         }
-
-        // TODO: bajar la apuesta (temporal)
         findViewById<View>(R.id.btnMenos).setOnClickListener {
-            Toast.makeText(this, "-", Toast.LENGTH_SHORT).show()
+            tragaperras.disminuirApuesta()
+            actualizarMarcadores()
         }
 
-        // TODO: girar los rodillos y calcular el resultado (temporal: abre las pantallas de resultado para verlas)
-        findViewById<View>(R.id.btnGirar).setOnClickListener {
-            startActivity(android.content.Intent(this, com.bugbusters.randomspace.ui.result.VictoryActivity::class.java))
-        }
-        findViewById<View>(R.id.btnGirar).setOnLongClickListener {
-            startActivity(android.content.Intent(this, com.bugbusters.randomspace.ui.result.DefeatActivity::class.java))
-            true
-        }
+        findViewById<View>(R.id.btnGirar).setOnClickListener { girar() }
 
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
+
+        // Estado inicial: mensaje de bienvenida y sin resultado
+        findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
+        findViewById<TextView>(R.id.tvResultadoTitulo).text = ""
+        findViewById<TextView>(R.id.tvResultado).text = ""
+        actualizarMarcadores()
     }
 
-    /**
-     * Rellena los textos de la pantalla. Los textos fijos están en strings.xml.
-     *
-     * @param bote bote actual (ya formateado)
-     * @param saldo saldo del jugador (ya formateado)
-     * @param apuesta apuesta elegida
-     * @param mensaje id del string de la combinación obtenida (p. ej. R.string.combo_aperitivo)
-     * @param resultado variación de monedas, ya formateada y con signo (p. ej. "+200" o "-150")
-     */
-    private fun mostrarDatos(
-        bote: String, saldo: String, apuesta: String,
-        mensaje: Int, resultado: String
-    ) {
-        findViewById<TextView>(R.id.tvBote).text = bote
-        findViewById<TextView>(R.id.tvSaldo).text = saldo
-        findViewById<TextView>(R.id.tvApuesta).text = apuesta
-        findViewById<TextView>(R.id.tvMensaje).setText(mensaje)
+    private fun girar() {
+        // Se guarda antes de girar porque si hay victoria o derrota la tragaperras reinicia el bote
+        val boteAntes = tragaperras.bote
+        val resultado = tragaperras.girar()
 
-        /// Si empieza por "-" es una pérdida: texto "PERDISTE" y número en rojo; si no, "GANASTE" y número en amarillo
-        val perdio = resultado.startsWith("-")
-
-        findViewById<TextView>(R.id.tvResultadoTitulo).setText(
-            if (perdio) R.string.resultado_perdiste else R.string.resultado_ganaste
-        )
-        findViewById<TextView>(R.id.tvResultado).apply {
-            text = resultado
-            setTextColor(ContextCompat.getColor(this@GameActivity, if (perdio) R.color.red else R.color.yellow))
+        rodillos.zip(resultado.rodillos).forEach { (vista, simbolo) ->
+            vista.setImageResource(simbolo.imagen())
         }
+        mostrarResultado(resultado)
+        actualizarMarcadores()
+
+        when (resultado.estado) {
+            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
+            EstadoPartida.DERROTA -> abrirDerrota(resultado, boteAntes)
+            EstadoPartida.EN_CURSO -> Unit
+        }
+    }
+
+    //Bote, saldo y apuesta actuales.
+    private fun actualizarMarcadores() {
+        findViewById<TextView>(R.id.tvBote).text = formatear(tragaperras.bote)
+        findViewById<TextView>(R.id.tvSaldo).text = formatear(tragaperras.saldo)
+        findViewById<TextView>(R.id.tvApuesta).text = tragaperras.apuesta.toString()
+    }
+
+    // Frase de la combinación y monedas ganadas (amarillo) o perdidas (rojo).
+    private fun mostrarResultado(resultado: ResultadoTirada) {
+        findViewById<TextView>(R.id.tvMensaje).setText(resultado.combinacion.texto())
+
+        val (titulo, color) = when {
+            resultado.variacion > 0 -> R.string.resultado_ganaste to R.color.yellow
+            resultado.variacion < 0 -> R.string.resultado_perdiste to R.color.red
+            else -> R.string.resultado_empate to R.color.white
+        }
+        findViewById<TextView>(R.id.tvResultadoTitulo).setText(titulo)
+        findViewById<TextView>(R.id.tvResultado).apply {
+            text = if (resultado.variacion == 0) "" else formatearConSigno(resultado.variacion)
+            setTextColor(ContextCompat.getColor(this@GameActivity, color))
+        }
+    }
+
+    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int) {
+        val intent = Intent(this, VictoryActivity::class.java)
+            .putExtra(EXTRA_BOTE_BASE, boteAntes)
+            .putExtra(EXTRA_MULTIPLICADOR, resultado.variacion / boteAntes)
+            .putExtra(EXTRA_PREMIO, resultado.variacion)
+            .putExtra(EXTRA_SALDO, resultado.saldoDespues)
+        startActivity(intent)
+    }
+
+    private fun abrirDerrota(resultado: ResultadoTirada, boteAntes: Int) {
+        val intent = Intent(this, DefeatActivity::class.java)
+            .putExtra(EXTRA_BOTE_BASE, boteAntes)
+            .putExtra(EXTRA_NUEVO_BOTE, tragaperras.bote)
+            .putExtra(EXTRA_SALDO, resultado.saldoDespues)
+        startActivity(intent)
+    }
+
+    companion object {
+        // Claves de los datos que se pasan a las pantallas de victoria y derrota
+        const val EXTRA_BOTE_BASE = "bote_base"
+        const val EXTRA_MULTIPLICADOR = "multiplicador"
+        const val EXTRA_PREMIO = "premio"
+        const val EXTRA_NUEVO_BOTE = "nuevo_bote"
+        const val EXTRA_SALDO = "saldo"
+
+        /** 1300 -> "1.300" */
+        fun formatear(monedas: Int): String = String.format(Locale.GERMANY, "%,d", monedas)
+
+        /** 600 -> "+600", -150 -> "-150" */
+        fun formatearConSigno(monedas: Int): String = String.format(Locale.GERMANY, "%+,d", monedas)
     }
 }
