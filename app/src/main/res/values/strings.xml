@@ -72,6 +72,7 @@
     <string name="nombre_hint">NOMBRE</string>
     <string name="btn_empezar">¡EMPEZAR!</string>
     <string name="nombre_vacio">Escribe un nombre para continuar</string>
+    <string name="error_base_datos">No se han podido guardar los datos. Inténtalo de nuevo</string>
 
     <!-- Pantalla de premios -->
     <string name="premios_titulo">PREMIOS</string>

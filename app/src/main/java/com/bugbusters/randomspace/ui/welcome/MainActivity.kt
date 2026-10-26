@@ -1,19 +1,23 @@
 package com.bugbusters.randomspace.ui.welcome
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.bugbusters.randomspace.R
+import com.bugbusters.randomspace.RandomSpaceApp
+import com.bugbusters.randomspace.data.repository.DatosInicio
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
 import android.content.Intent
 import com.bugbusters.randomspace.ui.game.GameActivity
 import com.bugbusters.randomspace.ui.history.HistoryActivity
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 /**
  * Pantalla de inicio de Random Space.
@@ -22,6 +26,11 @@ import com.bugbusters.randomspace.ui.history.HistoryActivity
  * y da acceso a las pantallas de juego e historial y al menú de opciones.
  */
 class MainActivity : AppCompatActivity() {
+
+    private val repositorio by lazy { (application as RandomSpaceApp).repositorio }
+
+    // Consultas a la BD en marcha: se cancelan en onDestroy para no tocar una pantalla ya cerrada
+    private val suscripciones = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,13 +51,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // TODO: DATOS INVENTADOS A SUSTITUIR (es para ver como queda, es temporal)
+        // Mientras llegan los datos de la BD: el nombre que manda NameActivity y el resto vacío
         mostrarDatos(
-            usuario = intent.getStringExtra("nombre") ?: "CYBER_GAMBLER",
-            monedas = "1.200",
-            bote = "1.300",
-            fechas = listOf("19/10/2026", "18/10/2026", "17/10/2026", "16/10/2026", "15/10/2026"),
-            puntos = listOf("5.100", "3.500", "2.800", "2.100", "900")
+            usuario = intent.getStringExtra("nombre") ?: "",
+            monedas = "",
+            bote = "",
+            fechas = emptyList(),
+            puntos = emptyList()
         )
 
         // Botón ¡JUGAR!: abre la pantalla de juego
@@ -63,6 +72,35 @@ class MainActivity : AppCompatActivity() {
 
         // Botón de menú (hamburguesa de la derecha): despliega el menú de opciones
         findViewById<View>(R.id.btnMenu).setOnClickListener { v -> MenuDesplegable.mostrar(this, v) }
+    }
+
+    // En onResume y no en onCreate: al volver de una partida el saldo, el bote y el top han cambiado
+    override fun onResume() {
+        super.onResume()
+        suscripciones.add(
+            repositorio.obtenerDatosInicio(MEJORES_PARTIDAS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { datos -> mostrarDatos(datos) },
+                    { error -> Log.e(TAG, "No se pudieron cargar los datos de inicio", error) }
+                )
+        )
+    }
+
+    override fun onDestroy() {
+        suscripciones.clear()
+        super.onDestroy()
+    }
+
+    // Convierte los datos de la BD en los textos de la pantalla
+    private fun mostrarDatos(datos: DatosInicio) {
+        mostrarDatos(
+            usuario = datos.jugador.nombre,
+            monedas = GameActivity.formatear(datos.jugador.saldo),
+            bote = GameActivity.formatear(datos.bote.cantidad),
+            fechas = datos.mejoresPartidas.map { GameActivity.formatearFecha(it.fecha) },
+            puntos = datos.mejoresPartidas.map { GameActivity.formatear(it.resultado) }
+        )
     }
 
     /**
@@ -89,5 +127,10 @@ class MainActivity : AppCompatActivity() {
             (tvPunto.parent as View).visibility =
                 if (i < puntos.size) View.VISIBLE else View.INVISIBLE
         }
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
+        private const val MEJORES_PARTIDAS = 5
     }
 }

@@ -2,33 +2,53 @@ package com.bugbusters.randomspace.ui.game
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
+import com.bugbusters.randomspace.RandomSpaceApp
+import com.bugbusters.randomspace.game.ReglasJuego
 import com.bugbusters.randomspace.game.ResultadoTirada
 import com.bugbusters.randomspace.game.Tragaperras
 import com.bugbusters.randomspace.model.EstadoPartida
+import com.bugbusters.randomspace.model.Partida
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
 import com.bugbusters.randomspace.ui.result.DefeatActivity
 import com.bugbusters.randomspace.ui.result.VictoryActivity
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
- * Toda la lógica está en game/Tragaperras; esta pantalla solo la usa y pinta el resultado.
+ * Toda la lógica está en game/Tragaperras; esta pantalla solo la usa, pinta el resultado
+ * y pide al repositorio que lo guarde.
  */
 class GameActivity : AppCompatActivity() {
 
-    // TODO: cuando exista la BD, crear la tragaperras con el saldo y el bote guardados
-    private val tragaperras = Tragaperras()
+    private val repositorio by lazy { (application as RandomSpaceApp).repositorio }
+
+    // Lecturas en marcha: se cancelan en onDestroy para no tocar una pantalla ya cerrada
+    private val suscripciones = CompositeDisposable()
+
+    // Se crea con el saldo y el bote guardados cuando llegan de la BD
+    private lateinit var tragaperras: Tragaperras
+
+    // Partida EN_CURSO en la BD. null mientras se carga o mientras se cierra una partida
+    private var partida: Partida? = null
 
     private lateinit var rodillos: List<ImageView>
+    private lateinit var botonesJuego: List<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +83,10 @@ class GameActivity : AppCompatActivity() {
 
         findViewById<View>(R.id.btnGirar).setOnClickListener { girar() }
 
+        // Hasta que no llegan los datos de la BD no se puede jugar
+        botonesJuego = listOf(findViewById(R.id.btnMas), findViewById(R.id.btnMenos), findViewById(R.id.btnGirar))
+        activarJuego(false)
+
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
 
@@ -70,10 +94,38 @@ class GameActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
         findViewById<TextView>(R.id.tvResultadoTitulo).text = ""
         findViewById<TextView>(R.id.tvResultado).text = ""
-        actualizarMarcadores()
+
+        cargarPartida()
+    }
+
+    override fun onDestroy() {
+        suscripciones.clear()
+        super.onDestroy()
+    }
+
+    // Recupera la partida en curso (o crea una) y arranca la tragaperras con su saldo y el bote activo
+    private fun cargarPartida() {
+        suscripciones.add(
+            repositorio.cargarPartida(ReglasJuego.SALDO_INICIAL)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { datos ->
+                        partida = datos.partida
+                        tragaperras = Tragaperras(
+                            saldoInicial = datos.partida.saldoFinal,
+                            boteInicial = datos.bote.cantidad
+                        )
+                        actualizarMarcadores()
+                        activarJuego(true)
+                    },
+                    { error -> mostrarError("No se pudo cargar la partida", error) }
+                )
+        )
     }
 
     private fun girar() {
+        val partidaActual = partida ?: return
+
         // Se guarda antes de girar porque si hay victoria o derrota la tragaperras reinicia el bote
         val boteAntes = tragaperras.bote
         val resultado = tragaperras.girar()
@@ -83,12 +135,62 @@ class GameActivity : AppCompatActivity() {
         }
         mostrarResultado(resultado)
         actualizarMarcadores()
+        guardar(partidaActual, resultado)
 
         when (resultado.estado) {
             EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
             EstadoPartida.DERROTA -> abrirDerrota(resultado, boteAntes)
             EstadoPartida.EN_CURSO -> Unit
         }
+    }
+
+    /**
+     * Guarda la tirada en la BD. Las escrituras NO van a [suscripciones]: si se sale de la pantalla
+     * deben terminar igualmente (cancelarlas perdería el saldo).
+     */
+    private fun guardar(partidaActual: Partida, resultado: ResultadoTirada) {
+        when (resultado.estado) {
+            EstadoPartida.EN_CURSO -> {
+                // La copia en memoria se actualiza al momento: la siguiente tirada ya parte de ella
+                val actualizada = repositorio.aplicarTirada(partidaActual, resultado.saldoDespues)
+                partida = actualizada
+                repositorio.guardarTirada(actualizada)
+                    .subscribe({}, { error -> Log.e(TAG, "No se pudo guardar la tirada", error) })
+            }
+            EstadoPartida.DERROTA -> terminarPartida(
+                repositorio.terminarConDerrota(partidaActual, resultado.saldoDespues, ReglasJuego.SALDO_INICIAL)
+            )
+            EstadoPartida.VICTORIA -> terminarPartida(
+                repositorio.terminarConVictoria(
+                    partidaActual, resultado.saldoDespues,
+                    ReglasJuego.SALDO_INICIAL, ReglasJuego.BOTE_INICIAL, ReglasJuego.INCREMENTO_BOTE
+                )
+            )
+        }
+    }
+
+    // Cierra la partida en la BD; hasta que no llega la nueva (con su id) no se puede volver a girar
+    private fun terminarPartida(operacion: Single<Partida>) {
+        partida = null
+        activarJuego(false)
+        operacion
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { nueva ->
+                    partida = nueva
+                    activarJuego(true)
+                },
+                { error -> mostrarError("No se pudo cerrar la partida", error) }
+            )
+    }
+
+    private fun activarJuego(activo: Boolean) {
+        botonesJuego.forEach { it.isEnabled = activo }
+    }
+
+    private fun mostrarError(mensaje: String, error: Throwable) {
+        Log.e(TAG, mensaje, error)
+        if (!isDestroyed) Toast.makeText(this, R.string.error_base_datos, Toast.LENGTH_SHORT).show()
     }
 
     //Bote, saldo y apuesta actuales.
@@ -132,6 +234,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "GameActivity"
+
         // Claves de los datos que se pasan a las pantallas de victoria y derrota
         const val EXTRA_BOTE_BASE = "bote_base"
         const val EXTRA_MULTIPLICADOR = "multiplicador"
@@ -144,5 +248,9 @@ class GameActivity : AppCompatActivity() {
 
         /** 600 -> "+600", -150 -> "-150" */
         fun formatearConSigno(monedas: Int): String = String.format(Locale.GERMANY, "%+,d", monedas)
+
+        /** Fecha guardada en la BD (epoch millis) -> "19/10/2026" */
+        fun formatearFecha(millis: Long): String =
+            SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(millis))
     }
 }
