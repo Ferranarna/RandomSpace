@@ -18,4 +18,9 @@
         android:id="@+id/opcionAyuda"
         style="@style/OpcionMenu"
         android:text="@string/menu_ayuda" />
+
+    <TextView
+        android:id="@+id/opcionHistorial"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_historial" />
 </LinearLayout>

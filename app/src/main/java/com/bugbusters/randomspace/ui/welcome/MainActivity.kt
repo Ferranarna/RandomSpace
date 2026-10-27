@@ -18,6 +18,7 @@ import com.bugbusters.randomspace.ui.game.GameActivity
 import com.bugbusters.randomspace.ui.history.HistoryActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import android.app.Activity
 
 /**
  * Pantalla de inicio de Random Space.
@@ -132,5 +133,16 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
         private const val MEJORES_PARTIDAS = 5
+
+        /**
+         * Vuelve al inicio desde cualquier pantalla. CLEAR_TOP cierra las pantallas que están
+         * encima de MainActivity y SINGLE_TOP reutiliza la que ya existe en vez de crear otra.
+         */
+        fun irAlInicio(activity: Activity) {
+            val intent = Intent(activity, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            activity.startActivity(intent)
+        }
     }
+
 }

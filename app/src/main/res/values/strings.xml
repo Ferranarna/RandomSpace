@@ -13,13 +13,14 @@
     <!-- Opciones del menú desplegable -->
     <string name="menu_premios">PREMIOS</string>
     <string name="menu_ayuda">AYUDA</string>
+    <string name="menu_historial">HISTORIAL</string>
 
     <!-- Accesibilidad: no se ve en pantalla, lo lee TalkBack (lector de pantalla) al enfocar el botón de menú -->
     <string name="desc_menu">Abrir menú</string>
 
     <!-- Pantalla de ayuda. Los textos con <font color> se pintan como HTML desde HelpActivity -->
     <string name="help_titulo">AYUDA</string>
-    <string name="help_monedas_texto"><![CDATA[EMPIEZAS CON <font color="#edd204">1000</font> [M] Y TU APUESTA MULTIPLICA LO QUE GANAS O PIERDES<br><font color="#edd204">10</font> [M] = <font color="#2EEA3C">x1</font> / <font color="#edd204">30</font> [M] = <font color="#2EEA3C">x3</font>]]></string>
+    <string name="help_monedas_texto"><![CDATA[EMPIEZAS CON <font color="#edd204">1000</font> [M] Y TU APUESTA MULTIPLICA LO QUE GANAS O PIERDES<br><font color="#edd204">10</font> [M] = <font color="#2EEA3C">x1</font> / <font color="#edd204">100</font> [M] = <font color="#2EEA3C">x</font>]]></string>
     <string name="help_bote_titulo">BOTE PROGRESIVO</string>
     <string name="help_bote_texto"><![CDATA[EMPIEZA EN <font color="#edd204">1000</font> [M]<br>SUBE <font color="#edd204">100</font> [M] POR DERROTA]]></string>
     <string name="help_premio_titulo">VICTORIA</string>
@@ -36,7 +37,7 @@
     <string name="tienes_titulo">"TIENES: "</string>
     <string name="resultado_ganaste">"GANASTE: "</string>
     <string name="resultado_perdiste">"PERDISTE: "</string>
-    <string name="resultado_empate">"SIN CAMBIOS"</string>
+    <string name="resultado_empate">"   SIN CAMBIOS"</string>
     <string name="combo_premio_gordo">¡PREMIO GORDO!</string>
     <string name="combo_alineacion">¡ALINEACIÓN!</string>
     <string name="combo_trio_planetario">¡TRÍO PLANETARIO!</string>
@@ -49,7 +50,8 @@
     <string name="combo_calor">¡QUÉ CALOR!</string>
     <string name="combo_atacan">¡NOS ATACAN!</string>
     <string name="combo_sigue">¡SIGUE EXPLORANDO!</string>
-    <string name="mensaje_bienvenida">¡BIENVENIDO! PULSA GIRAR</string>
+    <string name="mensaje_bienvenida">¡BIENVENIDO!</string>
+    <string name="mensaje_pulsa_girar">"  ¡PULSA GIRAR!"</string>
 
     <!-- Pantallas de victoria y derrota -->
     <string name="victoria_titulo">¡VICTORIA!</string>

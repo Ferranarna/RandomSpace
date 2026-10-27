@@ -28,6 +28,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.bugbusters.randomspace.ui.welcome.MainActivity
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
@@ -88,12 +89,13 @@ class GameActivity : AppCompatActivity() {
         activarJuego(false)
 
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
-        findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
+        findViewById<View>(R.id.btnVolver).setOnClickListener { MainActivity.irAlInicio(this) }
 
-        // Estado inicial: mensaje de bienvenida y sin resultado
+        // Estado inicial: "¡BIENVENIDO!" arriba, "¡PULSA GIRAR!" abajo y sin moneda
         findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
-        findViewById<TextView>(R.id.tvResultadoTitulo).text = ""
+        findViewById<TextView>(R.id.tvResultadoTitulo).setText(R.string.mensaje_pulsa_girar)
         findViewById<TextView>(R.id.tvResultado).text = ""
+        findViewById<View>(R.id.ivMonedaResultado).visibility = View.INVISIBLE
 
         cargarPartida()
     }
@@ -214,6 +216,8 @@ class GameActivity : AppCompatActivity() {
             text = if (resultado.variacion == 0) "" else formatearConSigno(resultado.variacion)
             setTextColor(ContextCompat.getColor(this@GameActivity, color))
         }
+        findViewById<View>(R.id.ivMonedaResultado).visibility =
+            if (resultado.variacion == 0) View.INVISIBLE else View.VISIBLE
     }
 
     private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int) {
