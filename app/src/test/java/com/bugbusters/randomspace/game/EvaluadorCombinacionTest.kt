@@ -16,7 +16,7 @@ class EvaluadorCombinacionTest {
 
     @Test
     fun tresPlanetasDistintosEsAlineacion() {
-        assertEquals(Combinacion.ALINEACION, evaluar(LUNA, TIERRA, JUPITER))
+        assertEquals(Combinacion.ALINEACION, evaluar(NEPTUNO, TIERRA, SATURNO))
     }
 
     @Test
@@ -36,7 +36,7 @@ class EvaluadorCombinacionTest {
 
     @Test
     fun dosPlanetasIgualesEsDoble() {
-        assertEquals(Combinacion.DOBLE, evaluar(LUNA, LUNA, SOL))
+        assertEquals(Combinacion.DOBLE, evaluar(NEPTUNO, NEPTUNO, SOL))
     }
 
     @Test

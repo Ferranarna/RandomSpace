@@ -52,6 +52,12 @@ object MenuDesplegable {
             abrir(activity, HistoryActivity::class.java)
         }
 
+        // Salir de la app: cierra todas las pantallas abiertas
+        contenido.findViewById<View>(R.id.opcionSalir).setOnClickListener {
+            popup.dismiss()
+            activity.finishAffinity()
+        }
+
         // Desplazamiento horizontal negativo: el borde derecho del menú coincide con el del botón
         popup.showAsDropDown(anchor, anchor.width - ancho, (8 * densidad).toInt())
     }
@@ -69,4 +75,5 @@ object MenuDesplegable {
             activity.finish()
         }
     }
+
 }

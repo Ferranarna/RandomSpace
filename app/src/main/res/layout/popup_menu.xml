@@ -23,4 +23,9 @@
         android:id="@+id/opcionHistorial"
         style="@style/OpcionMenu"
         android:text="@string/menu_historial" />
+
+    <TextView
+        android:id="@+id/opcionSalir"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_salir" />
 </LinearLayout>

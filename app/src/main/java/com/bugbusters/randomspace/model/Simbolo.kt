@@ -1,8 +1,8 @@
 package com.bugbusters.randomspace.model
 
 enum class Simbolo {
-    HAMBURGUESA, LUNA, TIERRA, JUPITER, ESTRELLA, OVNI, SOL;
+    HAMBURGUESA, NEPTUNO, TIERRA, SATURNO, ESTRELLA, OVNI, SOL;
 
     val esPlaneta: Boolean
-        get() = this == LUNA || this == TIERRA || this == JUPITER
+        get() = this == NEPTUNO || this == TIERRA || this == SATURNO
 }

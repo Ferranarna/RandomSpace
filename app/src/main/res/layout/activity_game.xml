@@ -73,7 +73,7 @@
             <ImageView
                 android:id="@+id/rodillo3"
                 style="@style/Rodillo"
-                android:src="@drawable/rodillo_jupiter" />
+                android:src="@drawable/rodillo_saturno" />
         </LinearLayout>
 
         <!-- Resultado de la tirada: "GANASTE: +200 [moneda]" o "PERDISTE: -150 [moneda]" -->

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bugbusters.randomspace.R
 import com.bugbusters.randomspace.RandomSpaceApp
+import com.bugbusters.randomspace.model.EstadoPartida
 import com.bugbusters.randomspace.ui.game.GameActivity
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -45,7 +46,7 @@ class HistoryActivity : AppCompatActivity() {
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
         findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
 
-        // Partidas terminadas del jugador; lo ganado o perdido es saldo final - saldo inicial
+        // Partidas terminadas del jugador, con el saldo con el que acabó cada una
         suscripciones.add(
             repositorio.obtenerJugador()
                 .flatMapSingle { jugador -> repositorio.obtenerHistorial(jugador.id) }
@@ -55,7 +56,8 @@ class HistoryActivity : AppCompatActivity() {
                         mostrarPartidas(partidas.map {
                             FilaHistorial(
                                 GameActivity.formatearFecha(it.fecha),
-                                GameActivity.formatearConSigno(it.saldoFinal - it.saldoInicial)
+                                GameActivity.formatear(it.saldoFinal),
+                                it.estado == EstadoPartida.VICTORIA
                             )
                         })
                     },

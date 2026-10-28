@@ -10,7 +10,7 @@ import com.bugbusters.randomspace.R
 /**
  * Una fila del historial.
  */
-data class FilaHistorial(val fecha: String, val resultado: String)
+data class FilaHistorial(val fecha: String, val resultado: String, val victoria: Boolean)
 
 /**
  * Pinta la lista de partidas del historial. Las ganancias salen en verde y las pérdidas en rojo.
@@ -33,8 +33,8 @@ class HistoryAdapter(private val filas: List<FilaHistorial>) :
         val fila = filas[position]
         holder.tvFecha.text = fila.fecha
         holder.tvResultado.text = fila.resultado
-        // Rojo si es una pérdida (empieza por "-"), verde si es una ganancia
-        val color = if (fila.resultado.startsWith("-")) R.color.red else R.color.green
+        // Verde si la partida fue una victoria, rojo si fue una derrota
+        val color = if (fila.victoria) R.color.green else R.color.red
         holder.tvResultado.setTextColor(ContextCompat.getColor(holder.itemView.context, color))
     }
 

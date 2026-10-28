@@ -100,6 +100,12 @@ class GameActivity : AppCompatActivity() {
         cargarPartida()
     }
 
+    // Al volver desde Victoria o Derrota se muestran ya el bote y el saldo de la partida nueva
+    override fun onResume() {
+        super.onResume()
+        if (::tragaperras.isInitialized) actualizarMarcadores()
+    }
+
     override fun onDestroy() {
         suscripciones.clear()
         super.onDestroy()
@@ -136,7 +142,8 @@ class GameActivity : AppCompatActivity() {
             vista.setImageResource(simbolo.imagen())
         }
         mostrarResultado(resultado)
-        actualizarMarcadores()
+        // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
+        if (resultado.estado == EstadoPartida.EN_CURSO) actualizarMarcadores()
         guardar(partidaActual, resultado)
 
         when (resultado.estado) {

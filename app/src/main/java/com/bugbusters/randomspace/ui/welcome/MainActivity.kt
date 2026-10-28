@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             monedas = GameActivity.formatear(datos.jugador.saldo),
             bote = GameActivity.formatear(datos.bote.cantidad),
             fechas = datos.mejoresPartidas.map { GameActivity.formatearFecha(it.fecha) },
-            puntos = datos.mejoresPartidas.map { GameActivity.formatear(it.resultado) }
+            puntos = datos.mejoresPartidas.map { GameActivity.formatear(it.saldoFinal) }
         )
     }
 

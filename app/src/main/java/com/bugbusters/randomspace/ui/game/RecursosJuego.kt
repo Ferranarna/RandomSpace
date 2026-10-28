@@ -10,9 +10,9 @@ import com.bugbusters.randomspace.model.Simbolo
 @DrawableRes
 fun Simbolo.imagen(): Int = when (this) {
     Simbolo.HAMBURGUESA -> R.drawable.rodillo_hamburguesa
-    Simbolo.LUNA -> R.drawable.rodillo_luna
+    Simbolo.NEPTUNO -> R.drawable.rodillo_neptuno
     Simbolo.TIERRA -> R.drawable.rodillo_tierra
-    Simbolo.JUPITER -> R.drawable.rodillo_jupiter
+    Simbolo.SATURNO -> R.drawable.rodillo_saturno
     Simbolo.ESTRELLA -> R.drawable.rodillo_estrella
     Simbolo.OVNI -> R.drawable.rodillo_ovni
     Simbolo.SOL -> R.drawable.rodillo_sol
