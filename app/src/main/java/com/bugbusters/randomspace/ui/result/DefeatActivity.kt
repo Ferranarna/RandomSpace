@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
+import com.bugbusters.randomspace.ui.welcome.MainActivity
 
 /**
  * Pantalla de derrota: saldo insuficiente, puntuación guardada y nuevo bote.
@@ -31,7 +32,7 @@ class DefeatActivity : AppCompatActivity() {
         findViewById<View>(R.id.btnMenu).setOnClickListener { v -> MenuDesplegable.mostrar(this, v) }
 
         // Botón VOLVER: cierra la pantalla
-        findViewById<View>(R.id.btnVolver).setOnClickListener { finish() }
+        findViewById<View>(R.id.btnVolver).setOnClickListener { MainActivity.irAlInicio(this) }
 
         // Datos que manda GameActivity al perder
         val boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0)

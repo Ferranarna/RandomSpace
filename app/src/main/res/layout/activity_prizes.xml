@@ -32,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <View style="@style/Espaciador" android:layout_weight="0.3" />
 
         <!-- 3 burgers: bote -->
         <LinearLayout style="@style/FilaPremio">
@@ -156,7 +155,22 @@
             </LinearLayout>
         </LinearLayout>
 
-        <View style="@style/Espaciador" android:layout_weight="0.3" />
+        <!-- 1 ovni: pérdida -->
+        <LinearLayout style="@style/FilaPremio">
+            <ImageView style="@style/ImagenPremio" android:src="@drawable/img_premio_1_ovni" />
+            <LinearLayout style="@style/NombrePremio">
+                <LinearLayout style="@style/LineaPremio">
+                    <TextView style="@style/TextoPremio" android:text="@string/premio_1_ovni" />
+                </LinearLayout>
+                <LinearLayout style="@style/LineaPremio" android:layout_marginTop="6dp">
+                    <TextView style="@style/NumeroPremio" android:text="-100"
+                        android:textColor="@color/red" tools:ignore="HardcodedText" />
+                    <ImageView style="@style/Moneda" />
+                    <TextView style="@style/MultiplicadorPremio" android:text="@string/premio_x1" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
     <!-- ========== BOTÓN VOLVER (fijo abajo) ========== -->

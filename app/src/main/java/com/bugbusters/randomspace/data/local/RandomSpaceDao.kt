@@ -125,8 +125,10 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
         empezarPartida(db, partida.jugadorId, nuevoBoteId, saldoInicial)
     }
 
+    // Solo las victorias, de mayor a menor saldo final
     fun obtenerMejoresPartidas(jugadorId: Long, limite: Int): List<Partida> = consultarPartidasTerminadas(
-        jugadorId, "${TablaPartida.COL_RESULTADO} DESC, ${TablaPartida.COL_FECHA} DESC", limite.toString()
+        jugadorId, "${TablaPartida.COL_SALDO_FINAL} DESC, ${TablaPartida.COL_FECHA} DESC", limite.toString(),
+        soloVictorias = true
     )
 
     fun obtenerHistorial(jugadorId: Long): List<Partida> =
@@ -199,11 +201,15 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
         )
     }
 
-    private fun consultarPartidasTerminadas(jugadorId: Long, orden: String, limite: String?): List<Partida> {
+    private fun consultarPartidasTerminadas(
+        jugadorId: Long, orden: String, limite: String?, soloVictorias: Boolean = false
+    ): List<Partida> {
+        val condicionEstado = if (soloVictorias) "=" else "!="
+        val estado = if (soloVictorias) EstadoPartida.VICTORIA else EstadoPartida.EN_CURSO
         dbHelper.readableDatabase.query(
             TablaPartida.NOMBRE_TABLA, null,
-            "${TablaPartida.COL_JUGADOR_ID} = ? AND ${TablaPartida.COL_ESTADO} != ?",
-            arrayOf(jugadorId.toString(), EstadoPartida.EN_CURSO.name),
+            "${TablaPartida.COL_JUGADOR_ID} = ? AND ${TablaPartida.COL_ESTADO} $condicionEstado ?",
+            arrayOf(jugadorId.toString(), estado.name),
             null, null, orden, limite
         ).use { cursor ->
             val partidas = ArrayList<Partida>(cursor.count)

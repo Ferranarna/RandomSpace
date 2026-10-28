@@ -11,6 +11,7 @@ import com.bugbusters.randomspace.R
 import android.content.Intent
 import com.bugbusters.randomspace.ui.help.HelpActivity
 import com.bugbusters.randomspace.ui.prizes.PrizesActivity
+import com.bugbusters.randomspace.ui.history.HistoryActivity
 
 /**
  * Menú desplegable del botón de la hamburguesa, compartido por todas las pantallas.
@@ -36,22 +37,43 @@ object MenuDesplegable {
         // Pantalla Ayuda
         contenido.findViewById<View>(R.id.opcionAyuda).setOnClickListener {
             popup.dismiss()
-            // Si ya estamos en Ayuda no la abrimos otra vez encima
-            if (activity !is HelpActivity) {
-                activity.startActivity(Intent(activity, HelpActivity::class.java))
-            }
+            abrir(activity, HelpActivity::class.java)
         }
 
         // Pantalla Premios
         contenido.findViewById<View>(R.id.opcionPremios).setOnClickListener {
             popup.dismiss()
-            // Si ya estamos en Premios no la abrimos otra vez encima
-            if (activity !is PrizesActivity) {
-                activity.startActivity(Intent(activity, PrizesActivity::class.java))
-            }
+            abrir(activity, PrizesActivity::class.java)
+        }
+
+        // Pantalla Historial
+        contenido.findViewById<View>(R.id.opcionHistorial).setOnClickListener {
+            popup.dismiss()
+            abrir(activity, HistoryActivity::class.java)
+        }
+
+        // Salir de la app: cierra todas las pantallas abiertas
+        contenido.findViewById<View>(R.id.opcionSalir).setOnClickListener {
+            popup.dismiss()
+            activity.finishAffinity()
         }
 
         // Desplazamiento horizontal negativo: el borde derecho del menú coincide con el del botón
         popup.showAsDropDown(anchor, anchor.width - ancho, (8 * densidad).toInt())
     }
+
+    /**
+     * Abre una pantalla del menú desde [activity].
+     * - Si ya estamos en ella, no hace nada (no se abre otra vez encima).
+     * - Si [activity] es también una pantalla del menú, se cierra: así VOLVER no pasa
+     *   de una pantalla del menú a otra, sino a lo que había antes de entrar al menú.
+     */
+    private fun abrir(activity: Activity, destino: Class<out Activity>) {
+        if (activity.javaClass == destino) return
+        activity.startActivity(Intent(activity, destino))
+        if (activity is HelpActivity || activity is PrizesActivity || activity is HistoryActivity) {
+            activity.finish()
+        }
+    }
+
 }
