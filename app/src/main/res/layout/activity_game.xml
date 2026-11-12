@@ -61,19 +61,25 @@
             android:layout_marginBottom="8dp"
             android:orientation="horizontal">
 
-            <!-- TODO: imágenes de ejemplo, se cambian desde el código al girar -->
-            <ImageView
-                android:id="@+id/rodillo1"
-                style="@style/Rodillo"
-                android:src="@drawable/rodillo_hamburguesa" />
-            <ImageView
-                android:id="@+id/rodillo2"
-                style="@style/Rodillo"
-                android:src="@drawable/rodillo_hamburguesa" />
-            <ImageView
-                android:id="@+id/rodillo3"
-                style="@style/Rodillo"
-                android:src="@drawable/rodillo_saturno" />
+            <!-- Cada rodillo es una ventana que recorta -->
+            <FrameLayout style="@style/VentanaRodillo">
+                <ImageView
+                    android:id="@+id/rodillo1"
+                    style="@style/Rodillo"
+                    tools:src="@drawable/rodillo_neptuno" />
+            </FrameLayout>
+            <FrameLayout style="@style/VentanaRodillo">
+                <ImageView
+                    android:id="@+id/rodillo2"
+                    style="@style/Rodillo"
+                    tools:src="@drawable/rodillo_hamburguesa" />
+            </FrameLayout>
+            <FrameLayout style="@style/VentanaRodillo">
+                <ImageView
+                    android:id="@+id/rodillo3"
+                    style="@style/Rodillo"
+                    tools:src="@drawable/rodillo_saturno" />
+            </FrameLayout>
         </LinearLayout>
 
         <!-- Resultado de la tirada: "GANASTE: +200 [moneda]" o "PERDISTE: -150 [moneda]" -->

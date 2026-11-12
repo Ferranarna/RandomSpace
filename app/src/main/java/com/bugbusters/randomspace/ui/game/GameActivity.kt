@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import com.bugbusters.randomspace.ui.welcome.MainActivity
+import com.bugbusters.randomspace.model.Simbolo
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
@@ -51,6 +52,11 @@ class GameActivity : AppCompatActivity() {
     private lateinit var rodillos: List<ImageView>
     private lateinit var botonesJuego: List<View>
 
+    private lateinit var animador: AnimadorRodillos
+
+    // Lo que hay que hacer cuando paren los rodillos (enseñar el resultado).
+    private var pendiente: (() -> Unit)? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,6 +78,9 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.rodillo3)
         )
 
+        animador = AnimadorRodillos(rodillos)
+        animador.mostrar(listOf(Simbolo.NEPTUNO, Simbolo.HAMBURGUESA, Simbolo.SATURNO))
+
         // Botones + y -: la tragaperras decide si se puede cambiar la apuesta
         findViewById<View>(R.id.btnMas).setOnClickListener {
             tragaperras.aumentarApuesta()
@@ -89,7 +98,9 @@ class GameActivity : AppCompatActivity() {
         activarJuego(false)
 
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
-        findViewById<View>(R.id.btnVolver).setOnClickListener { MainActivity.irAlInicio(this) }
+        findViewById<View>(R.id.btnVolver).setOnClickListener {
+            if (!animador.girando) MainActivity.irAlInicio(this)
+        }
 
         // Estado inicial: "¡BIENVENIDO!" arriba, "¡PULSA GIRAR!" abajo y sin moneda
         findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
@@ -104,9 +115,20 @@ class GameActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (::tragaperras.isInitialized) actualizarMarcadores()
+        // Si se cortó un giro al salir de la pantalla, ahora se enseña su resultado
+        val accion = pendiente
+        pendiente = null
+        accion?.invoke()
+    }
+
+    // Si se sale a mitad del giro se corta la animación (la tirada ya está guardada en la BD)
+    override fun onPause() {
+        animador.cancelar()
+        super.onPause()
     }
 
     override fun onDestroy() {
+        animador.cancelar()
         suscripciones.clear()
         super.onDestroy()
     }
@@ -133,18 +155,32 @@ class GameActivity : AppCompatActivity() {
 
     private fun girar() {
         val partidaActual = partida ?: return
+        if (animador.girando) return
 
         // Se guarda antes de girar porque si hay victoria o derrota la tragaperras reinicia el bote
         val boteAntes = tragaperras.bote
         val resultado = tragaperras.girar()
 
-        rodillos.zip(resultado.rodillos).forEach { (vista, simbolo) ->
-            vista.setImageResource(simbolo.imagen())
-        }
+        // La BD se guarda ya: si se sale a mitad de la animación, la tirada no se pierde
+        guardar(partidaActual, resultado)
+
+        // Mientras giran no se puede tocar nada, y el resultado se enseña cuando paren los rodillos
+        activarJuego(false)
+        pendiente = { terminarGiro(resultado, boteAntes) }
+        animador.girar(resultado.rodillos, object : EscuchaGiro {
+            override fun alTerminar() {
+                val accion = pendiente
+                pendiente = null
+                accion?.invoke()
+            }
+        })
+    }
+    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int) {
         mostrarResultado(resultado)
         // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
         if (resultado.estado == EstadoPartida.EN_CURSO) actualizarMarcadores()
-        guardar(partidaActual, resultado)
+        // En victoria o derrota los botones se activan cuando llega la partida nueva de la BD
+        if (partida != null) activarJuego(true)
 
         when (resultado.estado) {
             EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
@@ -187,7 +223,7 @@ class GameActivity : AppCompatActivity() {
             .subscribe(
                 { nueva ->
                     partida = nueva
-                    activarJuego(true)
+                    if (!animador.girando) activarJuego(true)
                 },
                 { error -> mostrarError("No se pudo cerrar la partida", error) }
             )
