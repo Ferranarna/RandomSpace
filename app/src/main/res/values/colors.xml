@@ -14,4 +14,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF2A2A</color>
+    <!-- Botones desactivados: el mismo color de cada botón, oscurecido -->
+    <color name="cyan_disabled">#177B8C</color>
+    <color name="cyan_disabled_stroke">#106370</color>
+    <color name="green_disabled">#198121</color>
+    <color name="green_disabled_stroke">#116518</color>
+    <color name="dark_purple_disabled">#0C0723</color>
+    <color name="magenta_disabled">#6F0E89</color>
+    <!-- Cenizas de la pantalla de derrota -->
+    <color name="ash_gray">#C8C8DC</color>
+    <color name="ash_dark">#8A8AA8</color>
+    <color name="ash_red">#C2506A</color>
 </resources>

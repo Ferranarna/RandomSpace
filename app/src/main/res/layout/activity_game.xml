@@ -43,7 +43,9 @@
         <View style="@style/Espaciador" />
 
         <!-- Mensaje de la tirada, p. ej. "¡LLUVIA DE ESTRELLA!" -->
-        <LinearLayout style="@style/PanelMensaje">
+        <LinearLayout
+            android:id="@+id/panelMensaje"
+            style="@style/PanelMensaje">
             <TextView
                 android:id="@+id/tvMensaje"
                 style="@style/TextoJuego"
@@ -83,7 +85,9 @@
         </LinearLayout>
 
         <!-- Resultado de la tirada: "GANASTE: +200 [moneda]" o "PERDISTE: -150 [moneda]" -->
-        <LinearLayout style="@style/PanelMensaje">
+        <LinearLayout
+            android:id="@+id/panelResultado"
+            style="@style/PanelMensaje">
             <TextView
                 android:id="@+id/tvResultadoTitulo"
                 style="@style/TextoJuego"
@@ -138,7 +142,9 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/yellow"
                     tools:text="1.200" />
-                <ImageView style="@style/Moneda" />
+                <ImageView
+                    android:id="@+id/ivMonedaSaldo"
+                    style="@style/Moneda" />
             </LinearLayout>
 
             <!-- Hueco del tamaño del botón -, para alinear con la fila de abajo -->
