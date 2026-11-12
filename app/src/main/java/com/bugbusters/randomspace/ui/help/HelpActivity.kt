@@ -50,6 +50,9 @@ class HelpActivity : AppCompatActivity() {
             val textView = findViewById<TextView>(vista)
             textView.text = conMonedas(getString(texto))
         }
+
+        // Título
+        findViewById<TextView>(R.id.tvTitulo).setText(R.string.help_titulo)
     }
 
     /**
@@ -88,4 +91,6 @@ class HelpActivity : AppCompatActivity() {
             canvas.restore()
         }
     }
+
+
 }

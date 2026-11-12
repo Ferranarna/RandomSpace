@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    cartel_bote.xml: cartel con el bote actual, compartido por las pantallas de inicio y juego.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="70dp">
+
+    <!-- Fondo: imagen del cartel -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/panel_bote"
+        android:scaleType="fitCenter"
+        android:contentDescription="@null" />
+
+    <!-- Texto centrado sobre el cartel: "BOTE: " + cantidad + moneda -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/TextoJuego"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:text="@string/bote_titulo"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tvBote"
+            style="@style/Texto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/yellow"
+            tools:text="10.000" />
+
+        <ImageView style="@style/Moneda" />
+    </LinearLayout>
+</FrameLayout>
