@@ -15,7 +15,6 @@ import android.animation.ValueAnimator
 import com.bugbusters.randomspace.ui.AnimacionNumeros
 import com.bugbusters.randomspace.ui.AnimacionVistas
 import android.view.ViewGroup
-import com.bugbusters.randomspace.ui.ConfetiView
 import com.bugbusters.randomspace.ui.EstiloParticulas
 import com.bugbusters.randomspace.ui.ParticulasView
 
@@ -67,6 +66,8 @@ class VictoryActivity : AppCompatActivity() {
             animarCabecera()
             animarNumeros()
             lanzarConfeti()
+            // Acciones al ganar (notificación, calendario, ubicación...): solo la primera vez, no al rotar
+            AccionesVictoria.alGanar(this, datosVictoria())
         }
     }
 
@@ -143,4 +144,13 @@ class VictoryActivity : AppCompatActivity() {
         )
         confeti.lanzar(EstiloParticulas.CONFETI)
     }
+
+    // Datos de la victoria que usan las acciones (cada una coge lo que necesite)
+    private fun datosVictoria() = DatosVictoria(
+        fecha = System.currentTimeMillis(),
+        boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0),
+        multiplicador = intent.getIntExtra(GameActivity.EXTRA_MULTIPLICADOR, 1),
+        premio = intent.getIntExtra(GameActivity.EXTRA_PREMIO, 0),
+        saldoFinal = intent.getIntExtra(GameActivity.EXTRA_SALDO, 0)
+    )
 }
