@@ -40,6 +40,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.lifecycle.Lifecycle
 import com.bugbusters.randomspace.game.GeneradorSimbolos
+import com.bugbusters.randomspace.ui.EstrellasView
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
@@ -206,7 +207,10 @@ class GameActivity : AppCompatActivity() {
             EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
             EstadoPartida.DERROTA -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.5f) { abrirDerrota(resultado, boteAntes) }
             // Una tirada normal en la que se pierden monedas también "duele", pero más suave
-            EstadoPartida.EN_CURSO -> if (resultado.variacion < 0) efectoPantalla(R.color.red, sacudir = true, intensidad = 0.3f)
+            EstadoPartida.EN_CURSO -> when {
+                resultado.variacion < 0 -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.3f)
+                resultado.variacion > 0 -> lanzarEstrellas()
+            }
         }
     }
 
@@ -397,6 +401,16 @@ class GameActivity : AppCompatActivity() {
             }
             start()
         }
+    }
+
+    // Pequeña explosión de estrellas desde los rodillos cuando se ganan monedas
+    private fun lanzarEstrellas() {
+        val estrellas = EstrellasView(this)
+        findViewById<ViewGroup>(android.R.id.content).addView(
+            estrellas,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        )
+        estrellas.lanzar(findViewById(R.id.contenedorRodillos))
     }
 
     private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int) {
