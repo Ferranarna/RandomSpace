@@ -11,11 +11,23 @@ import androidx.core.view.WindowInsetsCompat
 import com.bugbusters.randomspace.R
 import com.bugbusters.randomspace.ui.menu.MenuDesplegable
 import com.bugbusters.randomspace.ui.welcome.MainActivity
+import android.animation.ValueAnimator
+import com.bugbusters.randomspace.ui.AnimacionNumeros
+import com.bugbusters.randomspace.ui.AnimacionVistas
+import android.view.ViewGroup
+import com.bugbusters.randomspace.ui.EstiloParticulas
+import com.bugbusters.randomspace.ui.ParticulasView
 
 /**
  * Pantalla de victoria: premio gordo, bote ganado y récord guardado.
  */
 class VictoryActivity : AppCompatActivity() {
+
+    // Cuentas de números en marcha: se cancelan al cerrar la pantalla
+    private val cuentas = mutableListOf<ValueAnimator>()
+
+    // Animaciones de números que faltan por terminar (cuenta y giro de moneda)
+    private var pendientes = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +60,61 @@ class VictoryActivity : AppCompatActivity() {
             setText(R.string.victoria_titulo)
             setTextColor(androidx.core.content.ContextCompat.getColor(this@VictoryActivity, R.color.green))
         }
+
+        // Los números suben (solo la primera vez, no al rotar el móvil)
+        if (savedInstanceState == null) {
+            animarCabecera()
+            animarNumeros()
+            lanzarConfeti()
+            // Acciones al ganar (notificación, calendario, ubicación...): solo la primera vez, no al rotar
+            AccionesVictoria.alGanar(this, datosVictoria())
+        }
+    }
+
+    override fun onDestroy() {
+        cuentas.forEach { it.cancel() }
+        super.onDestroy()
+    }
+
+    // Título con estrellas, imagen y frase caen juntos desde arriba
+    private fun animarCabecera() {
+        AnimacionVistas.caer(
+            listOf<View>(
+                findViewById(R.id.cabeceraTitulo),
+                findViewById(R.id.ivResultado),
+                findViewById(R.id.tvSubtitulo)
+            )
+        )
+    }
+
+    // El saldo sube desde el que había antes de la tirada y el premio cuenta desde 0.
+    // Al acabar cada cuenta gira su moneda; cuando acaba todo, VOLVER se activa y aparece ¡GUARDADO!
+    private fun animarNumeros() {
+        val saldoFinal = intent.getIntExtra(GameActivity.EXTRA_SALDO, 0)
+        val saldoAntes = intent.getIntExtra(GameActivity.EXTRA_SALDO_ANTES, saldoFinal)
+        val premio = intent.getIntExtra(GameActivity.EXTRA_PREMIO, 0)
+
+        val volver = findViewById<View>(R.id.btnVolver)
+        val guardado = findViewById<View>(R.id.tvGuardado)
+        volver.isEnabled = false
+        guardado.alpha = 0f
+        pendientes = 2
+        val alTerminar: () -> Unit = {
+            pendientes--
+            if (pendientes == 0) {
+                volver.isEnabled = true
+                AnimacionVistas.aparecer(guardado)
+            }
+        }
+
+        cuentas += AnimacionNumeros.contar(
+            findViewById(R.id.tvPremio), 0, premio,
+            moneda = findViewById(R.id.ivMonedaPremio), alTerminar = alTerminar
+        ) { GameActivity.formatear(it) }
+        cuentas += AnimacionNumeros.contar(
+            findViewById(R.id.tvSaldo), saldoAntes, saldoFinal,
+            moneda = findViewById(R.id.ivMonedaSaldo), alTerminar = alTerminar
+        ) { GameActivity.formatear(it) }
     }
 
     /**
@@ -56,7 +123,6 @@ class VictoryActivity : AppCompatActivity() {
      * @param boteBase bote antes de multiplicar (ya formateado, p. ej. "1.000")
      * @param multiplicador apuesta / 10 (de 1 a 10)
      * @param premio boteBase x multiplicador (ya formateado, p. ej. "3.000")
-     * @param guardado puntuación guardada (ya formateada)
      * @param saldo saldo del jugador (ya formateado)
      */
     private fun mostrarDatos(
@@ -68,4 +134,23 @@ class VictoryActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tvPremio).text = premio
         findViewById<TextView>(R.id.tvSaldo).text = saldo
     }
+
+    // Confeti de píxeles que cae por toda la pantalla
+    private fun lanzarConfeti() {
+        val confeti = ParticulasView(this)
+        findViewById<ViewGroup>(android.R.id.content).addView(
+            confeti,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        )
+        confeti.lanzar(EstiloParticulas.CONFETI)
+    }
+
+    // Datos de la victoria que usan las acciones (cada una coge lo que necesite)
+    private fun datosVictoria() = DatosVictoria(
+        fecha = System.currentTimeMillis(),
+        boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0),
+        multiplicador = intent.getIntExtra(GameActivity.EXTRA_MULTIPLICADOR, 1),
+        premio = intent.getIntExtra(GameActivity.EXTRA_PREMIO, 0),
+        saldoFinal = intent.getIntExtra(GameActivity.EXTRA_SALDO, 0)
+    )
 }

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Desactivado: gris, para que se vea que no se puede pulsar -->
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@color/dark_purple_disabled" />
+            <stroke android:width="3dp" android:color="@color/magenta_disabled" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
     <item android:state_pressed="true">
         <shape>
             <solid android:color="@color/dark_purple" />
