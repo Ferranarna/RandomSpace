@@ -90,4 +90,17 @@
     <string name="premio_2_ovnis_soles">2 OVNIS/SOLES</string>
     <string name="premio_1_ovni">1 OVNI</string>
     <string name="premio_x1">" (x1-10)"</string>
+
+    <!-- Captura pantalla -->
+    <string name="desc_captura">Guardar captura de la victoria</string>
+    <string name="captura_guardada">¡Captura guardada!</string>
+    <string name="captura_error">No se ha podido guardar la captura</string>
+
+    <!-- Calendario -->
+    <string name="calendario_titulo">¡Victoria en Random Space!</string>
+    <string name="calendario_descripcion">¡Ganaste el bote! Te llevaste %1$s monedas y tu saldo final fue %2$s. ¡Felicidades! ¡Hoy brillaste más que las estrellas!</string>
+    <string name="calendario_guardado">Victoria guardada en el calendario</string>
+    <string name="calendario_sin_permiso">Sin permiso del calendario no se puede guardar la victoria</string>
+    <string name="calendario_sin_calendario">No hay ningún calendario donde guardar la victoria</string>
+    <string name="calendario_error">No se ha podido guardar la victoria en el calendario</string>
 </resources>

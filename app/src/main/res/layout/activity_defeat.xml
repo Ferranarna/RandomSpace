@@ -28,11 +28,14 @@
 
         <View style="@style/Espaciador" />
 
-        <include layout="@layout/titulo_pantalla" />
+        <include
+            android:id="@+id/cabeceraTitulo"
+            layout="@layout/titulo_pantalla" />
 
         <View style="@style/Espaciador" />
 
         <ImageView
+            android:id="@+id/ivResultado"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:contentDescription="@null"
@@ -42,6 +45,7 @@
         <View style="@style/Espaciador" />
 
         <TextView
+            android:id="@+id/tvSubtitulo"
             style="@style/SubtituloResultado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,21 +81,21 @@
                 android:orientation="horizontal">
                 <TextView
                     android:id="@+id/tvBoteBase"
-                    style="@style/TextoJuego"
+                    style="@style/TextoMonedas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1.000" />
                 <ImageView style="@style/Moneda" />
                 <TextView
                     android:id="@+id/tvIncremento"
-                    style="@style/TextoJuego"
+                    style="@style/TextoMonedas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     tools:text="+100" />
                 <ImageView style="@style/Moneda" />
                 <TextView
-                    style="@style/TextoJuego"
+                    style="@style/TextoMonedas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/igual"
@@ -111,7 +115,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="1.100" />
-                <ImageView style="@style/Moneda" />
+                <ImageView
+                    android:id="@+id/ivMonedaNuevoBote"
+                    style="@style/Moneda" />
             </LinearLayout>
         </LinearLayout>
 
@@ -156,10 +162,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="1.000" />
-                    <ImageView style="@style/Moneda" />
+                    <ImageView
+                        android:id="@+id/ivMonedaSaldo"
+                        style="@style/Moneda" />
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvGuardado"
                     style="@style/TextoJuego"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
