@@ -163,7 +163,7 @@ class GameActivity : AppCompatActivity() {
                         tragaperras = Tragaperras(
                             saldoInicial = datos.partida.saldoFinal,
                             boteInicial = datos.bote.cantidad,
-                            //generador = GeneradorSimbolos { Simbolo.HAMBURGUESA } // PARA PODER PROBAR
+                            generador = GeneradorSimbolos { Simbolo.HAMBURGUESA } // PARA PODER PROBAR
                         )
                         actualizarMarcadores()
                         activarJuego(true)

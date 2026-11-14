@@ -54,6 +54,9 @@ class VictoryActivity : AppCompatActivity() {
         if (uri != null && captura != null) guardarCaptura(uri, captura)
     }
 
+    // Acciones al ganar (calendario, notificación, ubicación...): se crean con la pantalla para poder registrar sus permisos
+    private val acciones = com.bugbusters.randomspace.ui.result.AccionesVictoria(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -95,7 +98,7 @@ class VictoryActivity : AppCompatActivity() {
             animarNumeros()
             lanzarConfeti()
             // Acciones al ganar (notificación, calendario, ubicación...): solo la primera vez, no al rotar
-            AccionesVictoria.alGanar(this, datosVictoria())
+            acciones.alGanar(datosVictoria())
         }
     }
 
