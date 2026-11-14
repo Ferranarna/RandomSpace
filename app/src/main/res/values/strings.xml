@@ -90,4 +90,9 @@
     <string name="premio_2_ovnis_soles">2 OVNIS/SOLES</string>
     <string name="premio_1_ovni">1 OVNI</string>
     <string name="premio_x1">" (x1-10)"</string>
+
+    <!-- Captura pantalla -->
+    <string name="desc_captura">Guardar captura de la victoria</string>
+    <string name="captura_guardada">¡Captura guardada!</string>
+    <string name="captura_error">No se ha podido guardar la captura</string>
 </resources>
