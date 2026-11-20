@@ -19,6 +19,8 @@ import com.bugbusters.randomspace.ui.history.HistoryActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import android.app.Activity
+import android.animation.ValueAnimator
+import com.bugbusters.randomspace.ui.AnimacionNumeros
 
 /**
  * Pantalla de inicio de Random Space.
@@ -32,6 +34,10 @@ class MainActivity : AppCompatActivity() {
 
     // Consultas a la BD en marcha: se cancelan en onDestroy para no tocar una pantalla ya cerrada
     private val suscripciones = CompositeDisposable()
+
+    // Bote que se está viendo en pantalla (para contar desde ahí cuando sube) y cuentas en marcha
+    private var boteMostrado: Int? = null
+    private val cuentas = mutableListOf<ValueAnimator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +95,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        cuentas.forEach { it.cancel() }
         suscripciones.clear()
         super.onDestroy()
     }
@@ -102,6 +109,18 @@ class MainActivity : AppCompatActivity() {
             fechas = datos.mejoresPartidas.map { GameActivity.formatearFecha(it.fecha) },
             puntos = datos.mejoresPartidas.map { GameActivity.formatear(it.saldoFinal) }
         )
+        animarBote(datos.bote.cantidad)
+    }
+
+    // Si el bote ha subido desde la última vez que se vio (por una derrota), sube contando y la moneda gira
+    private fun animarBote(nuevo: Int) {
+        val anterior = boteMostrado
+        boteMostrado = nuevo
+        if (anterior == null || nuevo <= anterior) return
+        cuentas += AnimacionNumeros.contar(
+            findViewById(R.id.tvBote), anterior, nuevo,
+            moneda = findViewById(R.id.ivMonedaBote)
+        ) { GameActivity.formatear(it) }
     }
 
     /**

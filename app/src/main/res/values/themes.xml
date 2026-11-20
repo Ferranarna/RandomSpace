@@ -186,12 +186,18 @@
         <item name="android:paddingEnd">8dp</item>
     </style>
 
-    <!-- Imagen de un rodillo: ocupa un tercio del ancho del contenedor -->
-    <style name="Rodillo">
+    <!-- Ventana de un rodillo: recorta la tira de símbolos que se desplaza al girar -->
+    <style name="VentanaRodillo">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_margin">4dp</item>
+    </style>
+
+    <!-- Símbolo en reposo de un rodillo: rellena su ventana -->
+    <style name="Rodillo">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:scaleType">fitCenter</item>
         <item name="android:contentDescription">@null</item>
     </style>
