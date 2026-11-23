@@ -21,12 +21,12 @@ class AccionesVictoria(activity: AppCompatActivity) {
 
     // Cada acción se crea aquí, con la pantalla, para poder registrar sus permisos antes de que arranque
     private val calendario = CalendarioVictoria(activity)
-    // A: private val notificacion = NotificacionVictoria(activity)
+    private val notificacion = NotificacionVictoria(activity)
     // C: private val ubicacion = UbicacionVictoria(activity)
 
     fun alGanar(datos: DatosVictoria) {
         calendario.guardar(datos)
-        // A: notificacion.mostrar(datos)
+        notificacion.mostrar(datos)
         // C: ubicacion.guardar(datos)
     }
 }

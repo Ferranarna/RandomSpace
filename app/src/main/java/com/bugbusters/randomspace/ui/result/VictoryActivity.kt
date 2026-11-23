@@ -93,12 +93,16 @@ class VictoryActivity : AppCompatActivity() {
         }
 
         // Los números suben (solo la primera vez, no al rotar el móvil)
+        // Los números suben (solo la primera vez, no al rotar el móvil)
         if (savedInstanceState == null) {
             animarCabecera()
             animarNumeros()
             lanzarConfeti()
-            // Acciones al ganar (notificación, calendario, ubicación...): solo la primera vez, no al rotar
-            acciones.alGanar(datosVictoria())
+            // Acciones al ganar (notificación, calendario, ubicación...): solo la primera vez, no al rotar.
+            // Desde la notificación solo se enseñan los datos: la victoria ya se guardó
+            if (!intent.getBooleanExtra(NotificacionVictoria.EXTRA_DESDE_NOTIFICACION, false)) {
+                acciones.alGanar(datosVictoria())
+            }
         }
     }
 
