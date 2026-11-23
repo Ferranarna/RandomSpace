@@ -183,6 +183,7 @@ class VictoryActivity : AppCompatActivity() {
 
     // Datos de la victoria que usan las acciones (cada una coge lo que necesite)
     private fun datosVictoria() = DatosVictoria(
+        partidaId = intent.getLongExtra(GameActivity.EXTRA_PARTIDA_ID, -1L),
         fecha = System.currentTimeMillis(),
         boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0),
         multiplicador = intent.getIntExtra(GameActivity.EXTRA_MULTIPLICADOR, 1),

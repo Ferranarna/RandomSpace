@@ -134,6 +134,13 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
     fun obtenerHistorial(jugadorId: Long): List<Partida> =
         consultarPartidasTerminadas(jugadorId, "${TablaPartida.COL_FECHA} DESC", null)
 
+    //Guarda dónde se ganó la partida. Devuelve las filas cambiadas (1 si existe la partida).
+    fun guardarUbicacion(partidaId: Long, latitud: Double, longitud: Double): Int =
+        dbHelper.writableDatabase.update(TablaPartida.NOMBRE_TABLA, ContentValues().apply {
+            put(TablaPartida.COL_LATITUD, latitud)
+            put(TablaPartida.COL_LONGITUD, longitud)
+        }, "${TablaPartida.COL_ID} = ?", arrayOf(partidaId.toString()))
+
     // ---------- Ayudantes privados ----------
 
     private inline fun <T> enTransaccion(bloque: (SQLiteDatabase) -> T): T {
@@ -241,6 +248,14 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
         resultado = getInt(getColumnIndexOrThrow(TablaPartida.COL_RESULTADO)),
         saldoInicial = getInt(getColumnIndexOrThrow(TablaPartida.COL_SALDO_INICIAL)),
         saldoFinal = getInt(getColumnIndexOrThrow(TablaPartida.COL_SALDO_FINAL)),
-        estado = EstadoPartida.valueOf(getString(getColumnIndexOrThrow(TablaPartida.COL_ESTADO)))
+        estado = EstadoPartida.valueOf(getString(getColumnIndexOrThrow(TablaPartida.COL_ESTADO))),
+        latitud = getDoubleOrNull(TablaPartida.COL_LATITUD),
+        longitud = getDoubleOrNull(TablaPartida.COL_LONGITUD)
     )
+
+    // getDouble() devuelve 0.0 si la celda es NULL: hay que comprobarlo antes
+    private fun Cursor.getDoubleOrNull(columna: String): Double? {
+        val indice = getColumnIndexOrThrow(columna)
+        return if (isNull(indice)) null else getDouble(indice)
+    }
 }

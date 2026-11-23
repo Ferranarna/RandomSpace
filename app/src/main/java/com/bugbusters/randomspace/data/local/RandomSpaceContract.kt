@@ -2,7 +2,7 @@ package com.bugbusters.randomspace.data.local
 
 object RandomSpaceContract {
     const val NOMBRE_BD = "randomspace.db"
-    const val VERSION_BD = 1
+    const val VERSION_BD = 2
 
     object TablaJugador {
         const val NOMBRE_TABLA = "jugador"
@@ -40,5 +40,7 @@ object RandomSpaceContract {
         const val COL_SALDO_INICIAL = "saldo_inicial"
         const val COL_SALDO_FINAL = "saldo_final"
         const val COL_ESTADO = "estado"
+        const val COL_LATITUD = "latitud"
+        const val COL_LONGITUD = "longitud"
     }
 }
