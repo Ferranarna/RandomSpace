@@ -53,6 +53,9 @@
         <activity
             android:name=".ui.prizes.PrizesActivity"
             android:exported="false" />
+        <service
+            android:name=".audio.MusicaService"
+            android:exported="false" />
     </application>
 
 </manifest>

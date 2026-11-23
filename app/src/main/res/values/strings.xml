@@ -103,4 +103,11 @@
     <string name="calendario_sin_permiso">Sin permiso del calendario no se puede guardar la victoria</string>
     <string name="calendario_sin_calendario">No hay ningún calendario donde guardar la victoria</string>
     <string name="calendario_error">No se ha podido guardar la victoria en el calendario</string>
+
+    <!-- Musica -->
+    <string name="menu_musica_on">MÚSICA: SÍ</string>
+    <string name="menu_musica_off">MÚSICA: NO</string>
+    <string name="menu_cancion">ELEGIR CANCIÓN</string>
+    <string name="menu_oficial">MELODÍA OFICIAL</string>
+    <string name="musica_cancion_elegida">Canción elegida</string>
 </resources>

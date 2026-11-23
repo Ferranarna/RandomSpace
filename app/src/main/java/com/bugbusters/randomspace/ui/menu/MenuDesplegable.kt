@@ -12,6 +12,12 @@ import android.content.Intent
 import com.bugbusters.randomspace.ui.help.HelpActivity
 import com.bugbusters.randomspace.ui.prizes.PrizesActivity
 import com.bugbusters.randomspace.ui.history.HistoryActivity
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.bugbusters.randomspace.audio.ControlMusica
 
 /**
  * Menú desplegable del botón de la hamburguesa, compartido por todas las pantallas.
@@ -25,6 +31,29 @@ object MenuDesplegable {
      * @param activity pantalla desde la que se abre
      * @param anchor vista bajo la que aparece (el botón de la hamburguesa)
      */
+
+    /**
+     * Abre el selector de archivos del sistema para elegir un audio.
+     * No pide permisos: el jugador elige el archivo y Android nos deja leer solo ese.
+     */
+    private fun elegirCancion(activity: Activity) {
+        val registro = (activity as ComponentActivity).activityResultRegistry
+        lateinit var lanzador: ActivityResultLauncher<Array<String>>
+        lanzador = registro.register("elegir_cancion", ActivityResultContracts.OpenDocument()) { uri ->
+            lanzador.unregister()   // solo se usa una vez
+            if (uri == null) return@register   // el jugador ha cancelado
+            try {
+                // Para poder seguir leyéndola cuando se cierre y se vuelva a abrir la app
+                activity.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } catch (e: SecurityException) {
+                // Algunos selectores no lo permiten: la canción sonará hasta que se cierre la app
+            }
+            ControlMusica.elegirCancion(activity, uri)
+            Toast.makeText(activity, R.string.musica_cancion_elegida, Toast.LENGTH_SHORT).show()
+        }
+        lanzador.launch(arrayOf("audio/*"))
+    }
+
     fun mostrar(activity: Activity, anchor: View) {
         val densidad = activity.resources.displayMetrics.density
         val ancho = (220 * densidad).toInt()
@@ -50,6 +79,26 @@ object MenuDesplegable {
         contenido.findViewById<View>(R.id.opcionHistorial).setOnClickListener {
             popup.dismiss()
             abrir(activity, HistoryActivity::class.java)
+        }
+
+        // Música: el texto dice si está activada; al pulsar se activa o desactiva
+        val opcionMusica = contenido.findViewById<TextView>(R.id.opcionMusica)
+        opcionMusica.setText(if (ControlMusica.estaActivada(activity)) R.string.menu_musica_on else R.string.menu_musica_off)
+        opcionMusica.setOnClickListener {
+            popup.dismiss()
+            ControlMusica.alternar(activity)
+        }
+
+        // Elegir una canción del móvil
+        contenido.findViewById<View>(R.id.opcionCancion).setOnClickListener {
+            popup.dismiss()
+            elegirCancion(activity)
+        }
+
+        // Volver a la melodía oficial
+        contenido.findViewById<View>(R.id.opcionOficial).setOnClickListener {
+            popup.dismiss()
+            ControlMusica.elegirCancion(activity, null)
         }
 
         // Salir de la app: cierra todas las pantallas abiertas
