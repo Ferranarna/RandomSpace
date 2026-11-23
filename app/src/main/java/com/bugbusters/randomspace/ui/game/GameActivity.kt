@@ -41,6 +41,7 @@ import androidx.annotation.ColorRes
 import androidx.lifecycle.Lifecycle
 import com.bugbusters.randomspace.game.GeneradorSimbolos
 import com.bugbusters.randomspace.ui.EstrellasView
+import com.bugbusters.randomspace.audio.SonidosRodillos   // NUEVO (paso 2)
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
@@ -64,6 +65,9 @@ class GameActivity : AppCompatActivity() {
     private lateinit var botonesJuego: List<View>
 
     private lateinit var animador: AnimadorRodillos
+
+    // NUEVO (paso 2): efectos de sonido de los rodillos
+    private lateinit var sonidos: SonidosRodillos
 
     // Lo que hay que hacer cuando paren los rodillos (enseñar el resultado).
     private var pendiente: (() -> Unit)? = null
@@ -97,6 +101,9 @@ class GameActivity : AppCompatActivity() {
 
         animador = AnimadorRodillos(rodillos)
         animador.mostrar(listOf(Simbolo.NEPTUNO, Simbolo.HAMBURGUESA, Simbolo.SATURNO))
+
+        // NUEVO (paso 2)
+        sonidos = SonidosRodillos(this)
 
         // Botones + y -: la tragaperras decide si se puede cambiar la apuesta
         findViewById<View>(R.id.btnMas).setOnClickListener {
@@ -143,11 +150,13 @@ class GameActivity : AppCompatActivity() {
     // Si se sale a mitad del giro se corta la animación (la tirada ya está guardada en la BD)
     override fun onPause() {
         animador.cancelar()
+        sonidos.terminar()        // NUEVO (paso 2): si se sale a mitad del giro, que no siga sonando
         super.onPause()
     }
 
     override fun onDestroy() {
         animador.cancelar()
+        sonidos.liberar()         // NUEVO (paso 2)
         suscripciones.clear()
         super.onDestroy()
     }
@@ -189,7 +198,13 @@ class GameActivity : AppCompatActivity() {
         ocultarMensajes()
         pendiente = { terminarGiro(resultado, boteAntes, partidaActual.id) }
         animador.girar(resultado.rodillos, object : EscuchaGiro {
+            // NUEVO (paso 2): suena al empezar y al parar cada rodillo
+            override fun alEmpezar() = sonidos.empezarGiro()
+
+            override fun alPararRodillo(indice: Int) = sonidos.pararRodillo(indice)
+
             override fun alTerminar() {
+                sonidos.terminar()   // NUEVO (paso 2)
                 val accion = pendiente
                 pendiente = null
                 accion?.invoke()
