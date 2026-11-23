@@ -63,6 +63,8 @@ class RandomSpaceDbHelper(context: Context) : SQLiteOpenHelper(
                 ${TablaPartida.COL_ESTADO} TEXT NOT NULL,
                 ${TablaPartida.COL_SALDO_INICIAL} INTEGER NOT NULL,
                 ${TablaPartida.COL_SALDO_FINAL} INTEGER NOT NULL,
+                ${TablaPartida.COL_LATITUD} REAL,
+                ${TablaPartida.COL_LONGITUD} REAL,
                     CHECK (${TablaPartida.COL_ESTADO} IN ('EN_CURSO', 'VICTORIA', 'DERROTA')),
                     FOREIGN KEY (${TablaPartida.COL_BOTE_ID})
                         REFERENCES ${TablaBote.NOMBRE_TABLA} (${TablaBote.COL_ID}),
@@ -77,11 +79,13 @@ class RandomSpaceDbHelper(context: Context) : SQLiteOpenHelper(
         db.execSQL(crearPartida)
     }
 
+
+    // Migración por pasos: cada bloque lleva la BD de una versión a la siguiente sin perder datos
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS ${TablaPartida.NOMBRE_TABLA}")
-        db.execSQL("DROP TABLE IF EXISTS ${TablaTragaperras.NOMBRE_TABLA}")
-        db.execSQL("DROP TABLE IF EXISTS ${TablaBote.NOMBRE_TABLA}")
-        db.execSQL("DROP TABLE IF EXISTS ${TablaJugador.NOMBRE_TABLA}")
-        onCreate(db)
+        if (oldVersion < 2) {
+            // SQLite solo admite una columna por ALTER TABLE; las filas existentes quedan con NULL
+            db.execSQL("ALTER TABLE ${TablaPartida.NOMBRE_TABLA} ADD COLUMN ${TablaPartida.COL_LATITUD} REAL")
+            db.execSQL("ALTER TABLE ${TablaPartida.NOMBRE_TABLA} ADD COLUMN ${TablaPartida.COL_LONGITUD} REAL")
+        }
     }
 }

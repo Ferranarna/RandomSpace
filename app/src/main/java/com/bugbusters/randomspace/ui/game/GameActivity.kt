@@ -187,7 +187,7 @@ class GameActivity : AppCompatActivity() {
         // Mientras giran no se puede tocar nada, y el resultado se enseña cuando paren los rodillos
         activarJuego(false)
         ocultarMensajes()
-        pendiente = { terminarGiro(resultado, boteAntes) }
+        pendiente = { terminarGiro(resultado, boteAntes, partidaActual.id) }
         animador.girar(resultado.rodillos, object : EscuchaGiro {
             override fun alTerminar() {
                 val accion = pendiente
@@ -196,7 +196,7 @@ class GameActivity : AppCompatActivity() {
             }
         })
     }
-    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int) {
+    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int, partidaId: Long) {
         // En victoria o derrota no hacen falta los carteles: esos datos ya se ven en su pantalla
         if (resultado.estado == EstadoPartida.EN_CURSO) mostrarResultado(resultado) else prepararBienvenida()
         // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
@@ -205,7 +205,7 @@ class GameActivity : AppCompatActivity() {
         if (partida != null) activarJuego(true)
 
         when (resultado.estado) {
-            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
+            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes, partidaId)
             EstadoPartida.DERROTA -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.5f) { abrirDerrota(resultado, boteAntes) }
             // Una tirada normal en la que se pierden monedas también "duele", pero más suave
             EstadoPartida.EN_CURSO -> when {
@@ -414,8 +414,9 @@ class GameActivity : AppCompatActivity() {
         estrellas.lanzar(findViewById(R.id.contenedorRodillos))
     }
 
-    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int) {
+    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int, partidaId: Long) {
         val intent = Intent(this, VictoryActivity::class.java)
+            .putExtra(EXTRA_PARTIDA_ID, partidaId)
             .putExtra(EXTRA_BOTE_BASE, boteAntes)
             .putExtra(EXTRA_MULTIPLICADOR, resultado.variacion / boteAntes)
             .putExtra(EXTRA_PREMIO, resultado.variacion)
@@ -443,6 +444,7 @@ class GameActivity : AppCompatActivity() {
         const val EXTRA_NUEVO_BOTE = "nuevo_bote"
         const val EXTRA_SALDO = "saldo"
         const val EXTRA_SALDO_ANTES = "saldo_antes"
+        const val EXTRA_PARTIDA_ID = "partida_id"
 
         /** 1300 -> "1.300" */
         fun formatear(monedas: Int): String = String.format(Locale.GERMANY, "%,d", monedas)

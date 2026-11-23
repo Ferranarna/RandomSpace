@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 
 /** Datos de una victoria que necesitan las acciones que se lanzan al ganar. */
 data class DatosVictoria(
+    val partidaId: Long,     // fila de la partida ganada en la BD
     val fecha: Long,         // momento de la victoria (epoch millis)
     val boteBase: Int,       // bote antes de multiplicar
     val multiplicador: Int,  // apuesta / 10 (de 1 a 10)

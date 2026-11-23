@@ -127,6 +127,13 @@ class RandomSpaceRepository(private val dao: RandomSpaceDao) {
             )
         }.subscribeOn(escrituras)
 
+    // ---------- Ubicación ----------
+
+    /** Guarda dónde se ganó la partida [partidaId]. Va en escrituras: se ejecuta en orden tras cerrarla. */
+    fun guardarUbicacion(partidaId: Long, latitud: Double, longitud: Double): Completable =
+        Completable.fromAction { dao.guardarUbicacion(partidaId, latitud, longitud) }
+            .subscribeOn(escrituras)
+
     // ---------- Historial ----------
 
     fun obtenerHistorial(jugadorId: Long): Single<List<Partida>> =
