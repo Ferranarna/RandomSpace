@@ -110,4 +110,9 @@
     <string name="menu_cancion">ELEGIR CANCIÓN</string>
     <string name="menu_oficial">MELODÍA OFICIAL</string>
     <string name="musica_cancion_elegida">Canción elegida</string>
+
+    <!-- Notificaciones -->
+    <string name="notificacion_canal">Victorias</string>
+    <string name="notificacion_titulo">¡Has ganado en Random Space!</string>
+    <string name="notificacion_texto">Premio: %1$s monedas. Pulsa para ver los datos.</string>
 </resources>

@@ -1,6 +1,10 @@
 package com.bugbusters.randomspace.ui.game
 
+import android.Manifest                                        // NUEVO (paso 3)
 import android.content.Intent
+import android.os.Build                                         // NUEVO (paso 3)
+import androidx.activity.result.contract.ActivityResultContracts  // NUEVO (paso 3)
+import com.bugbusters.randomspace.ui.result.NotificacionVictoria  // NUEVO (paso 3)
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -69,6 +73,10 @@ class GameActivity : AppCompatActivity() {
     // NUEVO (paso 2): efectos de sonido de los rodillos
     private lateinit var sonidos: SonidosRodillos
 
+    // NUEVO (paso 3): pide el permiso de notificaciones al entrar a jugar (Android 13+)
+    private val pedirPermisoNotificaciones =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+
     // Lo que hay que hacer cuando paren los rodillos (enseñar el resultado).
     private var pendiente: (() -> Unit)? = null
     // Saldo que se está viendo en pantalla (para contar desde ahí hasta el nuevo)
@@ -133,6 +141,11 @@ class GameActivity : AppCompatActivity() {
         findViewById<View>(R.id.ivMonedaResultado).visibility = View.INVISIBLE
 
         cargarPartida()
+
+        // NUEVO (paso 3): se pide aquí y no al ganar, para que no choque con el permiso del calendario
+        if (!NotificacionVictoria.puedeNotificar(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pedirPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     // Al volver desde Victoria o Derrota se muestran ya el bote y el saldo de la partida nueva
