@@ -23,6 +23,20 @@
         android:id="@+id/opcionHistorial"
         style="@style/OpcionMenu"
         android:text="@string/menu_historial" />
+    <TextView
+        android:id="@+id/opcionMusica"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_musica_on" />
+
+    <TextView
+        android:id="@+id/opcionCancion"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_cancion" />
+
+    <TextView
+        android:id="@+id/opcionOficial"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_oficial" />
 
     <TextView
         android:id="@+id/opcionSalir"
