@@ -39,6 +39,11 @@
         android:text="@string/menu_oficial" />
 
     <TextView
+        android:id="@+id/opcionIdioma"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_idioma" />
+
+    <TextView
         android:id="@+id/opcionSalir"
         style="@style/OpcionMenu"
         android:text="@string/menu_salir" />
