@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="raw/ayuda_estilos.css">
+</head>
+<body>
+
+<section class="panel">
+    <h2 class="cian">Cómo jugar</h2>
+    <p>Empiezas con <span class="amarillo">1000</span> <img class="m" src="drawable/ic_moneda.png" alt="monedas"></p>
+    <p>Elige tu apuesta con + y − (de <span class="amarillo">10</span> a <span class="amarillo">100</span>) y pulsa ¡GIRAR!</p>
+    <p>La apuesta multiplica lo que ganas o pierdes:<br>
+        <span class="amarillo">10</span> = <span class="verde">x1</span> · <span class="amarillo">100</span> = <span class="verde">x10</span></p>
+</section>
+
+<section class="panel">
+    <h2 class="verde">Victoria</h2>
+    <p>3 burgers = <span class="amarillo">todo el bote</span>, multiplicado por la apuesta</p>
+</section>
+
+<section class="panel">
+    <h2 class="rojo">Derrota</h2>
+    <p>Si tu saldo baja de <span class="amarillo">10</span> <img class="m" src="drawable/ic_moneda.png" alt="monedas">
+        ya no puedes apostar: vuelves a empezar con <span class="amarillo">1000</span></p>
+</section>
+
+<section class="panel">
+    <h2 class="amarillo">Bote progresivo</h2>
+    <p>Empieza en <span class="amarillo">1000</span> <img class="m" src="drawable/ic_moneda.png" alt="monedas">
+        y sube <span class="amarillo">100</span> con cada derrota</p>
+</section>
+
+<section class="panel">
+    <h2 class="cian">Premios</h2>
+    <table class="premios">
+        <tr><td><img src="drawable/img_premio_3_burgers.png" alt=""></td><td class="nombre">3 burgers</td><td class="valor amarillo">Bote</td></tr>
+        <tr><td><img src="drawable/img_premio_3_alineados.png" alt=""></td><td class="nombre">3 planetas distintos</td><td class="valor verde">+500</td></tr>
+        <tr><td><img src="drawable/img_premio_3_planetas.png" alt=""></td><td class="nombre">3 planetas iguales</td><td class="valor verde">+250</td></tr>
+        <tr><td><img src="drawable/img_premio_2_burgers.png" alt=""></td><td class="nombre">2 burgers</td><td class="valor verde">+200</td></tr>
+        <tr><td><img src="drawable/img_premio_3_estrellas.png" alt=""></td><td class="nombre">3 estrellas</td><td class="valor verde">+50</td></tr>
+        <tr><td><img src="drawable/img_premio_2_planetas.png" alt=""></td><td class="nombre">2 iguales</td><td class="valor verde">+10</td></tr>
+        <tr><td><img src="drawable/img_premio_3_soles.png" alt=""></td><td class="nombre">3 ovnis / 3 soles</td><td class="valor rojo">−200</td></tr>
+        <tr><td><img src="drawable/img_premio_2_ovnis.png" alt=""></td><td class="nombre">2 ovnis / 2 soles</td><td class="valor rojo">−100</td></tr>
+        <tr><td><img src="drawable/img_premio_1_ovni.png" alt=""></td><td class="nombre">1 ovni</td><td class="valor rojo">−50</td></tr>
+    </table>
+    <p class="nota">Los valores se multiplican por la apuesta (<span class="verde">x1</span> a <span class="verde">x10</span>)</p>
+</section>
+
+<section class="panel">
+    <h2 class="magenta">Menú</h2>
+    <p>Desde el menú puedes ver los premios, esta ayuda y tu historial, activar o quitar la música,
+        elegir tu propia canción y cambiar el idioma</p>
+</section>
+
+</body>
+</html>

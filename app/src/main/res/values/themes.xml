@@ -120,31 +120,6 @@
     </style>
 
     <!-- ===== PANTALLA DE AYUDA ===== -->
-    <!-- Panel de ayuda -->
-    <style name="PanelAyuda" parent="Panel">
-        <item name="android:orientation">horizontal</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_marginTop">4dp</item>
-    </style>
-
-    <!-- Texto de ayuda -->
-    <style name="TextoAyuda" parent="Texto">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">30sp</item>
-        <item name="android:paddingStart">8dp</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <!-- Título de cada panel de ayuda -->
-    <style name="TituloAyuda" parent="TextoAyuda">
-        <item name="android:fontFamily">@font/pixel_big_font</item>
-        <item name="android:textSize">22sp</item>
-        <item name="android:textScaleX">0.8</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingStart">0dp</item>
-        <item name="android:paddingTop">4dp</item>
-    </style>
 
     <!-- Icono de un panel -->
     <style name="IconoPanel">

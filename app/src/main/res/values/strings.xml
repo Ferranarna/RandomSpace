@@ -21,13 +21,6 @@
 
     <!-- Pantalla de ayuda. Los textos con <font color> se pintan como HTML desde HelpActivity -->
     <string name="help_titulo">HELP</string>
-    <string name="help_monedas_texto"><![CDATA[YOU START WITH <font color="#edd204">1000</font> [M] AND YOUR BET MULTIPLIES WHAT YOU WIN OR LOSE<br><font color="#edd204">10</font> [M] = <font color="#2EEA3C">x1</font> | <font color="#edd204">100</font> [M] = <font color="#2EEA3C">x10</font>]]></string>
-    <string name="help_bote_titulo">PROGRESSIVE JACKPOT</string>
-    <string name="help_bote_texto"><![CDATA[STARTS AT <font color="#edd204">1000</font> [M]<br>RISES <font color="#edd204">100</font> [M] PER DEFEAT]]></string>
-    <string name="help_premio_titulo">VICTORY</string>
-    <string name="help_premio_texto"><![CDATA[3 BURGERS = <font color="#edd204">THE WHOLE JACKPOT</font><br>MULTIPLIED BY YOUR BET]]></string>
-    <string name="help_fin_titulo">DEFEAT</string>
-    <string name="help_fin_texto"><![CDATA[BALANCE <font color="#edd204">&lt; 10</font> [M]]]></string>
     <string name="btn_volver">BACK</string>
     <string name="menu_salir">EXIT</string>
 

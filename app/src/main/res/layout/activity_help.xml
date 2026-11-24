@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    activity_help.xml: pantalla de ayuda "CÓMO JUGAR" (estática, sin scroll).
-    Los textos con colores e iconos los rellena HelpActivity.
+    activity_help.xml: pantalla de ayuda. El contenido es una página HTML (res/raw/ayuda.html,
+    res/raw-es/ayuda.html) que HelpActivity carga en el WebView, con el mismo estilo que la app.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -25,60 +25,16 @@
         android:paddingEnd="16dp"
         android:paddingTop="8dp">
 
-        <!-- Título "CÓMO JUGAR" -->
+        <!-- Título "AYUDA" -->
         <include layout="@layout/titulo_pantalla" />
 
-        <View style="@style/Espaciador" />
-
-        <!-- Panel 1: como jugar -->
-        <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaPanel">
-                <TextView android:id="@+id/tvAyudaMonedas" style="@style/TextoAyuda"
-                    tools:text="EMPIEZAS CON 1000" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View style="@style/Espaciador" />
-
-        <!-- Panel 2: victoria -->
-        <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaPanel">
-                <TextView style="@style/TituloAyuda" android:text="@string/help_premio_titulo"
-                    android:textColor="@color/green" />
-                <View style="@style/LineaTitulo" />
-                <TextView android:id="@+id/tvAyudaPremio" style="@style/TextoAyuda"
-                    tools:text="3 BURGERS = TODO EL BOTE" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View style="@style/Espaciador" />
-
-        <!-- Panel 3: derrota -->
-        <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaPanel">
-                <TextView style="@style/TituloAyuda" android:text="@string/help_fin_titulo"
-                    android:textColor="@color/red" />
-                <View style="@style/LineaTitulo" />
-                <TextView android:id="@+id/tvAyudaFin" style="@style/TextoAyuda"
-                    tools:text="SALDO &lt; 10" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View style="@style/Espaciador" />
-
-        <!-- Panel 4: bote progresivo -->
-        <LinearLayout style="@style/PanelAyuda">
-            <LinearLayout style="@style/ColumnaPanel">
-                <TextView style="@style/TituloAyuda" android:text="@string/help_bote_titulo"
-                    android:textColor="@color/yellow" />
-                <View style="@style/LineaTitulo" />
-                <TextView android:id="@+id/tvAyudaBote" style="@style/TextoAyuda"
-                    tools:text="EMPIEZA EN 1000" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Espacio flexible: separa los paneles del botón VOLVER -->
-        <View style="@style/Espaciador" />
+        <!-- Página de ayuda: ocupa el resto y tiene su propio scroll -->
+        <WebView
+            android:id="@+id/webAyuda"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="12dp" />
     </LinearLayout>
 
     <!-- ========== BOTÓN VOLVER ========== -->
@@ -89,8 +45,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
-        android:paddingTop="8dp"
-        >
+        android:paddingTop="8dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnVolver"
