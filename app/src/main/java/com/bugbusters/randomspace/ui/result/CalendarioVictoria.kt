@@ -54,7 +54,7 @@ class CalendarioVictoria(private val activity: AppCompatActivity) {
         ContextCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
     }
 
-    // Busca un calendario y crea el evento, _Todo en un hilo de segundo plano
+    // Busca un calendario y crea el evento en un hilo de segundo plano
     private fun insertar(datos: DatosVictoria) {
         Completable.fromAction {
             val calendarioId = buscarCalendario() ?: throw SinCalendario()

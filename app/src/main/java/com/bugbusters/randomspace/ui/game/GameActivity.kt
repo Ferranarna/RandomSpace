@@ -46,7 +46,9 @@ import androidx.annotation.ColorRes
 import androidx.lifecycle.Lifecycle
 import com.bugbusters.randomspace.game.GeneradorSimbolos
 import com.bugbusters.randomspace.ui.EstrellasView
-import com.bugbusters.randomspace.audio.SonidosRodillos   // NUEVO (paso 2)
+import com.bugbusters.randomspace.audio.SonidosRodillos
+import android.text.format.DateUtils
+import androidx.core.content.edit
 
 
 /**
@@ -211,9 +213,25 @@ class GameActivity : AppCompatActivity() {
         if (faltan.isNotEmpty()) pedirPermisos.launch(faltan.toTypedArray())
     }
 
+    // Hora de la primera tirada de una partida: se guarda la primera vez que se pide y se recuerda
+    // aunque se cierre la app. Con ella se calcula cuánto se ha tardado en ganar
+    private fun horaPrimeraTirada(partidaId: Long): Long {
+        val preferencias = getSharedPreferences(PREFERENCIAS_TIEMPO, MODE_PRIVATE)
+        val clave = "inicio_$partidaId"
+        val guardada = preferencias.getLong(clave, 0L)
+        if (guardada != 0L) return guardada
+
+        val ahora = System.currentTimeMillis()
+        preferencias.edit { putLong(clave, ahora) }
+        return ahora
+    }
+
     private fun girar() {
         val partidaActual = partida ?: return
         if (animador.girando) return
+
+        // En la primera tirada de la partida se apunta la hora (en las siguientes no cambia)
+        horaPrimeraTirada(partidaActual.id)
 
         // Se guarda antes de girar porque si hay victoria o derrota la tragaperras reinicia el bote
         val boteAntes = tragaperras.bote
@@ -225,9 +243,9 @@ class GameActivity : AppCompatActivity() {
         // Mientras giran no se puede tocar nada, y el resultado se enseña cuando paren los rodillos
         activarJuego(false)
         ocultarMensajes()
-        pendiente = { terminarGiro(resultado, boteAntes, partidaActual.id) }
+        pendiente = { terminarGiro(resultado, boteAntes, partidaActual) }
         animador.girar(resultado.rodillos, object : EscuchaGiro {
-            // NUEVO (paso 2): suena al empezar y al parar cada rodillo
+            // suena al empezar y al parar cada rodillo
             override fun alEmpezar() = sonidos.empezarGiro()
 
             override fun alPararRodillo(indice: Int) = sonidos.pararRodillo(indice)
@@ -240,7 +258,7 @@ class GameActivity : AppCompatActivity() {
             }
         })
     }
-    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int, partidaId: Long) {
+    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int, partidaActual: Partida) {
         // En victoria o derrota no hacen falta los carteles: esos datos ya se ven en su pantalla
         if (resultado.estado == EstadoPartida.EN_CURSO) mostrarResultado(resultado) else prepararBienvenida()
         // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
@@ -249,7 +267,7 @@ class GameActivity : AppCompatActivity() {
         if (partida != null) activarJuego(true)
 
         when (resultado.estado) {
-            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes, partidaId)
+            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes, partidaActual)
             EstadoPartida.DERROTA -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.5f) { abrirDerrota(resultado, boteAntes) }
             // Una tirada normal en la que se pierden monedas también "duele", pero más suave
             EstadoPartida.EN_CURSO -> when {
@@ -458,9 +476,10 @@ class GameActivity : AppCompatActivity() {
         estrellas.lanzar(findViewById(R.id.contenedorRodillos))
     }
 
-    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int, partidaId: Long) {
+    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int, partidaActual: Partida) {
         val intent = Intent(this, VictoryActivity::class.java)
-            .putExtra(EXTRA_PARTIDA_ID, partidaId)
+            .putExtra(EXTRA_PARTIDA_ID, partidaActual.id)
+            .putExtra(EXTRA_INICIO_PARTIDA, horaPrimeraTirada(partidaActual.id))
             .putExtra(EXTRA_BOTE_BASE, boteAntes)
             .putExtra(EXTRA_MULTIPLICADOR, resultado.variacion / boteAntes)
             .putExtra(EXTRA_PREMIO, resultado.variacion)
@@ -480,6 +499,8 @@ class GameActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "GameActivity"
+        // Archivo de preferencias donde se guarda cuándo empezó a jugarse cada partida
+        private const val PREFERENCIAS_TIEMPO = "tiempos"
 
         // Claves de los datos que se pasan a las pantallas de victoria y derrota
         const val EXTRA_BOTE_BASE = "bote_base"
@@ -489,6 +510,7 @@ class GameActivity : AppCompatActivity() {
         const val EXTRA_SALDO = "saldo"
         const val EXTRA_SALDO_ANTES = "saldo_antes"
         const val EXTRA_PARTIDA_ID = "partida_id"
+        const val EXTRA_INICIO_PARTIDA = "inicio_partida"
 
         /** 1300 -> "1.300" */
         fun formatear(monedas: Int): String = String.format(Locale.GERMANY, "%,d", monedas)
@@ -499,6 +521,9 @@ class GameActivity : AppCompatActivity() {
         /** Fecha guardada en la BD (epoch millis) -> "19/10/2026" */
         fun formatearFecha(millis: Long): String =
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(millis))
+
+        /** Duración en milisegundos -> "04:32", o "1:04:32" si pasa de una hora */
+        fun formatearDuracion(millis: Long): String = DateUtils.formatElapsedTime(millis / 1000)
 
         // Cuánto después del primer mensaje salen el segundo y el saldo
         private const val RETRASO_SEGUNDO_MENSAJE = 300L

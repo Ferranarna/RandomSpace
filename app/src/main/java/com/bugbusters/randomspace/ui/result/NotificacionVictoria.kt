@@ -29,6 +29,13 @@ class NotificacionVictoria(private val activity: AppCompatActivity) {
         if (!puedeNotificar(activity)) return
         crearCanal()
 
+        val texto = activity.getString(
+            R.string.notificacion_texto,
+            GameActivity.formatear(datos.premio),
+            GameActivity.formatear(datos.saldoFinal),
+            GameActivity.formatearDuracion(datos.duracion)
+        )
+
         val alPulsar = PendingIntent.getActivity(
             activity,
             datos.partidaId.toInt(),     // uno distinto por victoria, para que no se pisen
@@ -40,9 +47,13 @@ class NotificacionVictoria(private val activity: AppCompatActivity) {
             .setSmallIcon(R.drawable.ic_notificacion)
             .setLargeIcon(BitmapFactory.decodeResource(activity.resources, R.drawable.ic_launcher))
             .setContentTitle(activity.getString(R.string.notificacion_titulo))
-            .setContentText(activity.getString(R.string.notificacion_texto, GameActivity.formatear(datos.premio)))
+            .setContentText(texto)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(texto))
             .setContentIntent(alPulsar)
             .setAutoCancel(true)         // desaparece al pulsarla
+            // Antes de Android 8 no hay canales: la ventana emergente se pide así (prioridad alta y con sonido)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND)
             .build()
 
         NotificationManagerCompat.from(activity).notify(datos.partidaId.toInt(), notificacion)
@@ -56,23 +67,25 @@ class NotificacionVictoria(private val activity: AppCompatActivity) {
         .putExtra(GameActivity.EXTRA_PREMIO, datos.premio)
         .putExtra(GameActivity.EXTRA_SALDO, datos.saldoFinal)
         .putExtra(GameActivity.EXTRA_SALDO_ANTES, datos.saldoFinal - datos.premio)
+        .putExtra(EXTRA_DURACION, datos.duracion)
         .putExtra(EXTRA_DESDE_NOTIFICACION, true)
 
     // Desde Android 8 cada notificación tiene que ir en un canal (el usuario lo ve en Ajustes)
     private fun crearCanal() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val canal = NotificationChannel(
-                CANAL, activity.getString(R.string.notificacion_canal), NotificationManager.IMPORTANCE_DEFAULT
+                CANAL, activity.getString(R.string.notificacion_canal), NotificationManager.IMPORTANCE_HIGH
             )
             activity.getSystemService(NotificationManager::class.java).createNotificationChannel(canal)
         }
     }
 
     companion object {
-        private const val CANAL = "victorias"
+        private const val CANAL = "victorias_emergentes"
 
         /** Extra para que la pantalla de victoria sepa que se abre desde la notificación. */
         const val EXTRA_DESDE_NOTIFICACION = "desde_notificacion"
+        const val EXTRA_DURACION = "duracion"
 
         /** Antes de Android 13 no hace falta permiso. */
         fun puedeNotificar(context: Context) =

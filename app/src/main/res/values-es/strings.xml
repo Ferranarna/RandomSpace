@@ -106,8 +106,9 @@
 
     <!-- Notificaciones -->
     <string name="notificacion_canal">Victorias</string>
-    <string name="notificacion_titulo">¡Has ganado en Random Space!</string>
-    <string name="notificacion_texto">Premio: %1$s monedas. Pulsa para ver los datos.</string>
+    <string name="notificacion_titulo">¡Victoria en Random Space!</string>
+    <string name="notificacion_texto">¡Ganaste el bote! Te llevaste %1$s monedas y tu saldo final fue %2$s. Tiempo: %3$s. ¡Hoy brillaste más que las estrellas!</string>
+    <string name="victoria_tiempo">"TIEMPO: %1$s"</string>
 
     <!-- Idioma -->
     <string name="menu_idioma">IDIOMA</string>
