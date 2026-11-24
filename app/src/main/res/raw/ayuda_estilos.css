@@ -1,0 +1,67 @@
+/* Estilos de la ayuda: mismos colores, fuentes y paneles que la app (colors.xml, panel_cian.xml) */
+@font-face { font-family: Pixel; src: url("font/pixel_font.ttf"); }
+@font-face { font-family: PixelBig; src: url("font/pixel_big_font.ttf"); }
+
+:root {
+    --panel: #0C1038;    /* dark_blue */
+    --cian: #29E0FF;     /* cyan */
+    --morado: #8A2BE2;   /* purple */
+    --magenta: #CA1AF9;  /* magenta */
+    --amarillo: #edd204; /* yellow */
+    --verde: #2EEA3C;    /* green */
+    --rojo: #FF2A2A;     /* red */
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    background: transparent;          /* se ve el fondo de la pantalla (bg_dark) */
+    color: #FFFFFF;
+    font-family: Pixel, monospace;
+    font-size: 24px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    -webkit-text-size-adjust: none;
+}
+
+body { padding: 0 0 8px; }
+
+/* Igual que panel_cian.xml */
+.panel {
+    background: var(--panel);
+    border: 3px solid var(--cian);
+    border-radius: 10px;
+    padding: 8px 12px;
+    margin: 0 0 12px;
+}
+
+/* Igual que TituloAyuda + LineaTitulo */
+h2 {
+    font-family: PixelBig, monospace;
+    font-weight: normal;
+    font-size: 20px;
+    text-align: center;
+    margin: 4px 0 6px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--morado);
+}
+
+p { margin: 6px 0; text-align: center; }
+
+.cian { color: var(--cian); }
+.magenta { color: var(--magenta); }
+.amarillo { color: var(--amarillo); }
+.verde { color: var(--verde); }
+.rojo { color: var(--rojo); }
+
+/* Icono de moneda dentro del texto */
+.m { height: 0.9em; vertical-align: -0.12em; }
+
+/* Tabla de premios */
+.premios { width: 100%; border-collapse: collapse; }
+.premios td { padding: 4px 2px; vertical-align: middle; }
+.premios img { width: 110px; display: block; }
+.premios .nombre { font-size: 18px; padding-left: 6px; }
+.premios .valor { text-align: right; white-space: nowrap; }
+.nota { font-size: 18px; }
