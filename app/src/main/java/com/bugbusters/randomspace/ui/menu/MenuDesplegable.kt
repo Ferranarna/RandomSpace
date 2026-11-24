@@ -101,6 +101,12 @@ object MenuDesplegable {
             ControlMusica.elegirCancion(activity, null)
         }
 
+        // Idioma: el del dispositivo, español o inglés
+        contenido.findViewById<View>(R.id.opcionIdioma).setOnClickListener {
+            popup.dismiss()
+            Idioma.elegir(activity)
+        }
+
         // Salir de la app: cierra todas las pantallas abiertas
         contenido.findViewById<View>(R.id.opcionSalir).setOnClickListener {
             popup.dismiss()
