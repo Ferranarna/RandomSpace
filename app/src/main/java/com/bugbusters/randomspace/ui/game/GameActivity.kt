@@ -4,7 +4,8 @@ import android.Manifest                                        // NUEVO (paso 3)
 import android.content.Intent
 import android.os.Build                                         // NUEVO (paso 3)
 import androidx.activity.result.contract.ActivityResultContracts  // NUEVO (paso 3)
-import com.bugbusters.randomspace.ui.result.NotificacionVictoria  // NUEVO (paso 3)
+import com.bugbusters.randomspace.ui.result.NotificacionVictoria // NUEVO (paso 3)
+import com.bugbusters.randomspace.ui.result.UbicacionVictoria
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -47,6 +48,7 @@ import com.bugbusters.randomspace.game.GeneradorSimbolos
 import com.bugbusters.randomspace.ui.EstrellasView
 import com.bugbusters.randomspace.audio.SonidosRodillos   // NUEVO (paso 2)
 
+
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
  * Toda la lógica está en game/Tragaperras; esta pantalla solo la usa, pinta el resultado
@@ -73,9 +75,10 @@ class GameActivity : AppCompatActivity() {
     // NUEVO (paso 2): efectos de sonido de los rodillos
     private lateinit var sonidos: SonidosRodillos
 
-    // NUEVO (paso 3): pide el permiso de notificaciones al entrar a jugar (Android 13+)
-    private val pedirPermisoNotificaciones =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+    // Permisos que usan las acciones al ganar (ubicación y notificaciones): se piden al entrar a jugar,
+    // en un solo diálogo, para que no choquen con el del calendario, que se pide al ganar
+    private val pedirPermisos =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
 
     // Lo que hay que hacer cuando paren los rodillos (enseñar el resultado).
     private var pendiente: (() -> Unit)? = null
@@ -142,10 +145,8 @@ class GameActivity : AppCompatActivity() {
 
         cargarPartida()
 
-        // NUEVO (paso 3): se pide aquí y no al ganar, para que no choque con el permiso del calendario
-        if (!NotificacionVictoria.puedeNotificar(this) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pedirPermisoNotificaciones.launch(Manifest.permission.POST_NOTIFICATIONS)
-        }
+        // Solo la primera vez: al girar el móvil la petición en curso se conserva, no hay que lanzarla otra vez
+        if (savedInstanceState == null) pedirPermisosQueFaltan()
     }
 
     // Al volver desde Victoria o Derrota se muestran ya el bote y el saldo de la partida nueva
@@ -193,6 +194,21 @@ class GameActivity : AppCompatActivity() {
                     { error -> mostrarError("No se pudo cargar la partida", error) }
                 )
         )
+    }
+
+    // Solo los permisos que faltan; el de notificaciones solo existe desde Android 13. Lista vacía: no se pide nada
+    private fun pedirPermisosQueFaltan() {
+        val faltan = buildList {
+            if (!UbicacionVictoria.tienePermiso(this@GameActivity)) {
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                !NotificacionVictoria.puedeNotificar(this@GameActivity)
+            ) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+        if (faltan.isNotEmpty()) pedirPermisos.launch(faltan.toTypedArray())
     }
 
     private fun girar() {
