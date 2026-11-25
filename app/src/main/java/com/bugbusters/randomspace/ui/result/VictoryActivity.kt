@@ -92,7 +92,13 @@ class VictoryActivity : AppCompatActivity() {
             setTextColor(androidx.core.content.ContextCompat.getColor(this@VictoryActivity, R.color.green))
         }
 
-        // Los números suben (solo la primera vez, no al rotar el móvil)
+        // Al abrirse desde la notificación, se ve cuánto duró la partida
+        if (intent.getBooleanExtra(NotificacionVictoria.EXTRA_DESDE_NOTIFICACION, false)) {
+            val duracion = intent.getLongExtra(NotificacionVictoria.EXTRA_DURACION, 0L)
+            findViewById<TextView>(R.id.tvGuardado).text =
+                getString(R.string.victoria_tiempo, GameActivity.formatearDuracion(duracion))
+        }
+
         // Los números suben (solo la primera vez, no al rotar el móvil)
         if (savedInstanceState == null) {
             animarCabecera()
@@ -186,14 +192,19 @@ class VictoryActivity : AppCompatActivity() {
     }
 
     // Datos de la victoria que usan las acciones (cada una coge lo que necesite)
-    private fun datosVictoria() = DatosVictoria(
-        partidaId = intent.getLongExtra(GameActivity.EXTRA_PARTIDA_ID, -1L),
-        fecha = System.currentTimeMillis(),
-        boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0),
-        multiplicador = intent.getIntExtra(GameActivity.EXTRA_MULTIPLICADOR, 1),
-        premio = intent.getIntExtra(GameActivity.EXTRA_PREMIO, 0),
-        saldoFinal = intent.getIntExtra(GameActivity.EXTRA_SALDO, 0)
-    )
+    private fun datosVictoria(): DatosVictoria {
+        val ahora = System.currentTimeMillis()
+        val inicio = intent.getLongExtra(GameActivity.EXTRA_INICIO_PARTIDA, ahora)
+        return DatosVictoria(
+            partidaId = intent.getLongExtra(GameActivity.EXTRA_PARTIDA_ID, -1L),
+            fecha = ahora,
+            duracion = ahora - inicio,
+            boteBase = intent.getIntExtra(GameActivity.EXTRA_BOTE_BASE, 0),
+            multiplicador = intent.getIntExtra(GameActivity.EXTRA_MULTIPLICADOR, 1),
+            premio = intent.getIntExtra(GameActivity.EXTRA_PREMIO, 0),
+            saldoFinal = intent.getIntExtra(GameActivity.EXTRA_SALDO, 0)
+        )
+    }
 
     // Hace una imagen de la pantalla (sin el icono ni el botón VOLVER) y abre el selector para elegir dónde guardarla
     private fun pedirCaptura() {

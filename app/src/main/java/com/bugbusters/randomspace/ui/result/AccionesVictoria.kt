@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 data class DatosVictoria(
     val partidaId: Long,     // fila de la partida ganada en la BD
     val fecha: Long,         // momento de la victoria (epoch millis)
+    val duracion: Long,      // milisegundos desde que empezó la partida hasta la victoria
     val boteBase: Int,       // bote antes de multiplicar
     val multiplicador: Int,  // apuesta / 10 (de 1 a 10)
     val premio: Int,         // boteBase x multiplicador

@@ -107,8 +107,9 @@
 
     <!-- Notificaciones -->
     <string name="notificacion_canal">Victories</string>
-    <string name="notificacion_titulo">You won in Random Space!</string>
-    <string name="notificacion_texto">Prize: %1$s coins. Tap to see the details.</string>
+    <string name="notificacion_titulo">Victory in Random Space!</string>
+    <string name="notificacion_texto">You won the jackpot! You took %1$s coins and your final balance was %2$s. Time: %3$s. Today you shone brighter than the stars!</string>
+    <string name="victoria_tiempo">"TIME: %1$s"</string>
 
     <!-- Idioma -->
     <string name="menu_idioma">LANGUAGE</string>
