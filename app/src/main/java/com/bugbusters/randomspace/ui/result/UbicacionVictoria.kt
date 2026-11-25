@@ -52,36 +52,44 @@ class UbicacionVictoria(private val activity: Activity) {
         private fun leerYGuardar(app: Context, partidaId: Long) {
             if (!tienePermiso(app)) return
             val locationManager = app.getSystemService(LocationManager::class.java)
-            val proveedor = elegirProveedor(locationManager) ?: run {
-                Log.w(TAG, "Ubicación desactivada o sin proveedor disponible")
+            if (!LocationManagerCompat.isLocationEnabled(locationManager)) {
+                Log.w(TAG, "Ubicación desactivada")
+                return
+            }
+            val proveedores = proveedoresDisponibles(locationManager)
+            if (proveedores.isEmpty()) {
+                Log.w(TAG, "Sin proveedor de ubicación disponible")
                 return
             }
             val repositorio = (app as RandomSpaceApp).repositorio
 
-            // 1) Si el sistema ya tiene una ubicación reciente, se usa: no hay que encender nada
-            val reciente = locationManager.getLastKnownLocation(proveedor)
-            if (reciente != null && esReciente(reciente)) {
-                guardarEnBd(repositorio, partidaId, reciente)
+            // 1) La más reciente de las que ya conoce el sistema (de cualquier proveedor). Si es reciente, se usa
+            val ultima = proveedores
+                .mapNotNull { locationManager.getLastKnownLocation(it) }
+                .maxByOrNull { it.elapsedRealtimeNanos }
+            if (ultima != null && esReciente(ultima)) {
+                guardarEnBd(repositorio, partidaId, ultima)
                 return
             }
 
-            // 2) Si no, se pide UNA lectura; el sistema la detiene sola (no queda ningún listener gastando batería)
+            // 2) Si no, se pide UNA lectura (el sistema la detiene sola). Si no llega, se guarda la última
+            //    conocida aunque sea antigua: mejor saber dónde estaba hace un rato que no saber nada
             LocationManagerCompat.getCurrentLocation(
-                locationManager, proveedor, null, ContextCompat.getMainExecutor(app)
+                locationManager, proveedores.first(), null, ContextCompat.getMainExecutor(app)
             ) { ubicacion ->
-                if (ubicacion != null) guardarEnBd(repositorio, partidaId, ubicacion)
+                val elegida = ubicacion ?: ultima
+                if (elegida != null) guardarEnBd(repositorio, partidaId, elegida)
                 else Log.w(TAG, "No se ha podido obtener la ubicación")
             }
         }
 
-        // Red (wifi/antenas): aproximada y sin GPS. Si no existe (p. ej. en el emulador), "fused" (Android 12+)
-        private fun elegirProveedor(locationManager: LocationManager): String? {
-            if (!LocationManagerCompat.isLocationEnabled(locationManager)) return null
-            return when {
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) -> LocationManager.NETWORK_PROVIDER
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                        locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER) -> LocationManager.FUSED_PROVIDER
-                else -> null
+        // Por orden de preferencia: red (wifi/antenas, sin GPS) y "fused". Desde Android 12, con permiso aproximado
+        // también se puede usar el GPS (el sistema devuelve la ubicación aproximada): en el emulador es el único que hay
+        private fun proveedoresDisponibles(locationManager: LocationManager): List<String> = buildList {
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) add(LocationManager.NETWORK_PROVIDER)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER)) add(LocationManager.FUSED_PROVIDER)
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) add(LocationManager.GPS_PROVIDER)
             }
         }
 
