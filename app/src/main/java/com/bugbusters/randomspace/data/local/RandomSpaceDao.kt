@@ -204,7 +204,7 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
                 " SET ${TablaJugador.COL_SALDO} = ?," +
                 " ${TablaJugador.COL_PUNTUACION_MAX} = MAX(${TablaJugador.COL_PUNTUACION_MAX}, ?)" +
                 " WHERE ${TablaJugador.COL_ID} = ?",
-            arrayOf(saldo, resultado, jugadorId)
+            arrayOf<Any>(saldo, resultado, jugadorId)
         )
     }
 

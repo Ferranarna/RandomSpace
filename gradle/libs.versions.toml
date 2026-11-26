@@ -10,6 +10,8 @@ activityKtx = "1.8.0"
 constraintlayout = "2.1.4"
 rxjava = "3.1.10"
 rxandroid = "3.0.2"
+googleServices = "4.6.0"
+firebaseBom = "35.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -22,7 +24,9 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 rxjava = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxjava" }
 rxandroid = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rxandroid" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
