@@ -115,7 +115,6 @@ class NameActivity : AppCompatActivity() {
 
     // Con la sesión iniciada: si ya hay jugador en el móvil va al inicio; si no, pide el nombre
     private fun continuar(actual: Sesion) {
-        findViewById<View>(R.id.tvLogin).visibility = View.GONE
         findViewById<View>(R.id.btnGoogle).visibility = View.GONE
         suscripciones.add(
             repositorio.obtenerJugador()

@@ -72,7 +72,6 @@
     <string name="error_base_datos">No se han podido guardar los datos. Inténtalo de nuevo</string>
 
     <!-- Inicio de sesión -->
-    <string name="login_titulo">INICIA SESIÓN PARA JUGAR</string>
     <string name="btn_google">ENTRAR CON GOOGLE</string>
     <string name="login_error">No se ha podido iniciar sesión. Inténtalo de nuevo</string>
     <string name="login_sin_cuenta">Añade una cuenta de Google en el dispositivo</string>

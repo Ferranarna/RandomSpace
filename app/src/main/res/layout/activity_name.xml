@@ -34,15 +34,12 @@
 
         <View style="@style/Espaciador" />
 
-        <!-- Momento 1: inicio de sesión -->
-        <TextView
-            android:id="@+id/tvLogin"
-            style="@style/TextoJuego"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/login_titulo"
-            android:textColor="@color/white" />
+        <!-- Momento 1: inicio de sesión, con el botón en el centro -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnGoogle"
+            style="@style/BotonGoogle"
+            android:background="@drawable/btn_cian"
+            android:text="@string/btn_google" />
 
         <!-- Momento 2: nombre del jugador (oculto hasta haber iniciado sesión) -->
         <LinearLayout
@@ -91,12 +88,6 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="16dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnGoogle"
-            style="@style/BotonGoogle"
-            android:background="@drawable/btn_cian"
-            android:text="@string/btn_google" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEmpezar"
