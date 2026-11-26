@@ -25,28 +25,33 @@ data class DatosPartida(val partida: Partida, val bote: Bote)
  * La UI solo tiene que añadir observeOn(AndroidSchedulers.mainThread()) antes de pintar.
  * Los valores iniciales (saldo, bote...) llegan como parámetros: data/ no importa game/ReglasJuego.
  */
-class RandomSpaceRepository(private val dao: RandomSpaceDao) {
+class RandomSpaceRepository(
+    private val dao: RandomSpaceDao,
+    private val uidActual: () -> String?      // cuenta que ha iniciado sesión
+) {
 
     private val lecturas = Schedulers.io()
     private val escrituras = Schedulers.single()
 
     // ---------- Jugador ----------
 
-    fun existeJugador(): Single<Boolean> =
-        Single.fromCallable { dao.existeJugador() }
-            .subscribeOn(lecturas)
-
     fun registrarJugador(
         nombre: String, saldoInicial: Int, boteInicial: Int, incrementoBote: Int, apuestaInicial: Int
     ): Single<Long> =
         Single.fromCallable {
-            dao.registrarJugador(nombre, saldoInicial, boteInicial, incrementoBote, apuestaInicial)
+            dao.registrarJugador(uid(), nombre, saldoInicial, boteInicial, incrementoBote, apuestaInicial)
         }.subscribeOn(escrituras)
 
-    /** Vacío (sin error) si aún no hay jugador. */
+    /**
+     * Jugador de la cuenta actual; vacío (sin error) si aún no tiene.
+     * Va en escrituras porque puede asignar la cuenta al jugador que ya existía.
+     */
     fun obtenerJugador(): Maybe<Jugador> =
-        Maybe.fromCallable<Jugador> { dao.obtenerJugador() }
-            .subscribeOn(lecturas)
+        Maybe.fromCallable<Jugador> { dao.obtenerJugador(uid()) }
+            .subscribeOn(escrituras)
+
+    private fun uid(): String = checkNotNull(uidActual()) { "No hay sesión iniciada" }
+
 
     // ---------- Pantalla de inicio ----------
 
@@ -79,7 +84,7 @@ class RandomSpaceRepository(private val dao: RandomSpaceDao) {
      */
     fun cargarPartida(saldoInicial: Int): Single<DatosPartida> =
         Single.fromCallable {
-            val jugador = checkNotNull(dao.obtenerJugador()) { "No hay jugador registrado" }
+            val jugador = checkNotNull(dao.obtenerJugador(uid())) { "No hay jugador registrado" }
             val bote = checkNotNull(dao.obtenerBoteActivo(jugador.id)) { "El jugador no tiene bote" }
             val partida = dao.obtenerPartidaEnCurso(jugador.id) ?: run {
                 val nueva = Partida(

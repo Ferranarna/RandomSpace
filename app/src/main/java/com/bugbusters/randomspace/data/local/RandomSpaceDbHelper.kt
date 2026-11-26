@@ -28,7 +28,8 @@ class RandomSpaceDbHelper(context: Context) : SQLiteOpenHelper(
                 ${TablaJugador.COL_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
                 ${TablaJugador.COL_NOMBRE} TEXT NOT NULL,
                 ${TablaJugador.COL_SALDO} INTEGER NOT NULL,
-                ${TablaJugador.COL_PUNTUACION_MAX} INTEGER NOT NULL
+                ${TablaJugador.COL_PUNTUACION_MAX} INTEGER NOT NULL,
+                ${TablaJugador.COL_UID} TEXT
             )
         """.trimIndent()
         val crearBote = """
@@ -86,6 +87,10 @@ class RandomSpaceDbHelper(context: Context) : SQLiteOpenHelper(
             // SQLite solo admite una columna por ALTER TABLE; las filas existentes quedan con NULL
             db.execSQL("ALTER TABLE ${TablaPartida.NOMBRE_TABLA} ADD COLUMN ${TablaPartida.COL_LATITUD} REAL")
             db.execSQL("ALTER TABLE ${TablaPartida.NOMBRE_TABLA} ADD COLUMN ${TablaPartida.COL_LONGITUD} REAL")
+        }
+        if (oldVersion < 3) {
+            // Cuenta de Google de cada jugador. El que ya existía queda con NULL
+            db.execSQL("ALTER TABLE ${TablaJugador.NOMBRE_TABLA} ADD COLUMN ${TablaJugador.COL_UID} TEXT")
         }
     }
 }

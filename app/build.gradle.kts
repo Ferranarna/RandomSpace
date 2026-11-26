@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -40,6 +41,20 @@ dependencies {
     implementation(libs.material)
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
+    // Login con Google (Credential Manager)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play)
+    implementation(libs.googleid)
+
+    // Llamadas REST a Firebase (Retrofit y Moshi)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.moshi)
+    implementation(libs.retrofit.rxjava3)
+    implementation(libs.moshi.kotlin)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

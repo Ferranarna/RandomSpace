@@ -59,6 +59,11 @@
         <item name="android:minHeight">0dp</item>
     </style>
 
+    <!-- Botón de Google -->
+    <style name="BotonGoogle" parent="BotonTitulo">
+        <item name="android:textSize">28sp</item>
+    </style>
+
     <!-- ===== CONTENEDORES ===== -->
     <!-- Panel con borde morado (usuario, mejores partidas...) -->
     <style name="Panel">

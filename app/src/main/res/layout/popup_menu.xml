@@ -44,6 +44,11 @@
         android:text="@string/menu_idioma" />
 
     <TextView
+        android:id="@+id/opcionCerrarSesion"
+        style="@style/OpcionMenu"
+        android:text="@string/menu_cerrar_sesion" />
+
+    <TextView
         android:id="@+id/opcionSalir"
         style="@style/OpcionMenu"
         android:text="@string/menu_salir" />

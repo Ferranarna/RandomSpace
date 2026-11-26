@@ -23,6 +23,7 @@
     <string name="help_titulo">HELP</string>
     <string name="btn_volver">BACK</string>
     <string name="menu_salir">EXIT</string>
+    <string name="menu_cerrar_sesion">SIGN OUT</string>
 
     <!-- Pantalla de juego -->
     <string name="apuesta_titulo">"BET: "</string>
@@ -70,6 +71,11 @@
     <string name="btn_empezar">START!</string>
     <string name="nombre_vacio">Enter a name to continue</string>
     <string name="error_base_datos">The data could not be saved. Please try again</string>
+
+    <!-- Inicio de sesión -->
+    <string name="btn_google">SIGN IN WITH GOOGLE</string>
+    <string name="login_error">Sign-in failed. Please try again</string>
+    <string name="login_sin_cuenta">Add a Google account to this device</string>
 
     <!-- Pantalla de premios -->
     <string name="premios_titulo">PRIZES</string>

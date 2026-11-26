@@ -7,6 +7,10 @@ import com.bugbusters.randomspace.data.repository.RandomSpaceRepository
 import android.app.Activity
 import android.os.Bundle
 import com.bugbusters.randomspace.audio.ControlMusica
+import com.bugbusters.randomspace.data.remote.ClienteFirebase
+import com.bugbusters.randomspace.data.repository.SesionRepository
+import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Retrofit
 
 /**
  * Aplicación: crea una sola vez la base de datos y el repositorio que comparten todas las pantallas.
@@ -17,8 +21,15 @@ class RandomSpaceApp : Application() {
 
     // by lazy: se crea la primera vez que alguien lo pide, y solo una vez
     val repositorio: RandomSpaceRepository by lazy {
-        RandomSpaceRepository(RandomSpaceDao(RandomSpaceDbHelper(this)))
+        RandomSpaceRepository(RandomSpaceDao(RandomSpaceDbHelper(this))) { sesion.sesionActual()?.uid }
     }
+
+    // Quién ha iniciado sesión y su token
+    val sesion: SesionRepository by lazy { SesionRepository(FirebaseAuth.getInstance()) }
+
+    // Retrofit compartido: los repositorios del top 10 y del bote crean sus llamadas a partir de él
+    val retrofit: Retrofit by lazy { ClienteFirebase.crear() }
+
     override fun onCreate() {
         super.onCreate()
         // Cuenta las pantallas visibles: con la primera suena la música y sin ninguna (app al fondo) se para

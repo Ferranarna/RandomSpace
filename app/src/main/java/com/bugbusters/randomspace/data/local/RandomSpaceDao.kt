@@ -2,7 +2,6 @@ package com.bugbusters.randomspace.data.local
 
 import android.content.ContentValues
 import android.database.Cursor
-import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import com.bugbusters.randomspace.data.local.RandomSpaceContract.TablaBote
 import com.bugbusters.randomspace.data.local.RandomSpaceContract.TablaJugador
@@ -20,23 +19,29 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
 
     // ---------- Jugador ----------
 
-    //true si ya hay un jugador registrado en el dispositivo.
-    fun existeJugador(): Boolean =
-        DatabaseUtils.queryNumEntries(dbHelper.readableDatabase, TablaJugador.NOMBRE_TABLA) > 0
-
-    //El jugador del dispositivo (solo hay uno), o null si aún no se ha registrado.
-    fun obtenerJugador(): Jugador? {
-        dbHelper.readableDatabase.query(
-            TablaJugador.NOMBRE_TABLA, null, null, null, null, null, null, "1"
-        ).use { cursor ->
-            return if (cursor.moveToFirst()) cursor.aJugador() else null
+    //El jugador de la cuenta [uid], o null si esa cuenta aún no tiene jugador en este móvil.
+    //El jugador creado antes del login no tiene cuenta: se asigna a la primera que lo pida.
+    fun obtenerJugador(uid: String): Jugador? = enTransaccion { db ->
+        buscarJugador(db, uid) ?: run {
+            db.update(TablaJugador.NOMBRE_TABLA, ContentValues().apply {
+                put(TablaJugador.COL_UID, uid)
+            }, "${TablaJugador.COL_UID} IS NULL", null)
+            buscarJugador(db, uid)
         }
     }
 
+    private fun buscarJugador(db: SQLiteDatabase, uid: String): Jugador? =
+        db.query(
+            TablaJugador.NOMBRE_TABLA, null, "${TablaJugador.COL_UID} = ?", arrayOf(uid), null, null, null, "1"
+        ).use { cursor ->
+            if (cursor.moveToFirst()) cursor.aJugador() else null
+        }
+
     fun registrarJugador(
-        nombre: String, saldoInicial: Int, boteInicial: Int, incrementoBote: Int, apuestaInicial: Int
+        uid: String, nombre: String, saldoInicial: Int, boteInicial: Int, incrementoBote: Int, apuestaInicial: Int
     ): Long = enTransaccion { db ->
         val jugadorId = db.insertOrThrow(TablaJugador.NOMBRE_TABLA, null, ContentValues().apply {
+            put(TablaJugador.COL_UID, uid)
             put(TablaJugador.COL_NOMBRE, nombre)
             put(TablaJugador.COL_SALDO, saldoInicial)
             put(TablaJugador.COL_PUNTUACION_MAX, 0)
@@ -204,7 +209,7 @@ class RandomSpaceDao(private val dbHelper: RandomSpaceDbHelper) {
                 " SET ${TablaJugador.COL_SALDO} = ?," +
                 " ${TablaJugador.COL_PUNTUACION_MAX} = MAX(${TablaJugador.COL_PUNTUACION_MAX}, ?)" +
                 " WHERE ${TablaJugador.COL_ID} = ?",
-            arrayOf(saldo, resultado, jugadorId)
+            arrayOf<Any>(saldo, resultado, jugadorId)
         )
     }
 
