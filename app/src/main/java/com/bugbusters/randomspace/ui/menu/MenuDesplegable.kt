@@ -18,6 +18,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bugbusters.randomspace.audio.ControlMusica
+import com.bugbusters.randomspace.RandomSpaceApp
+import com.bugbusters.randomspace.ui.name.LoginGoogle
+import com.bugbusters.randomspace.ui.name.NameActivity
 
 /**
  * Menú desplegable del botón de la hamburguesa, compartido por todas las pantallas.
@@ -107,6 +110,12 @@ object MenuDesplegable {
             Idioma.elegir(activity)
         }
 
+        // Cerrar sesión: vuelve a la pantalla de login
+        contenido.findViewById<View>(R.id.opcionCerrarSesion).setOnClickListener {
+            popup.dismiss()
+            cerrarSesion(activity)
+        }
+
         // Salir de la app: cierra todas las pantallas abiertas
         contenido.findViewById<View>(R.id.opcionSalir).setOnClickListener {
             popup.dismiss()
@@ -123,6 +132,15 @@ object MenuDesplegable {
      * - Si [activity] es también una pantalla del menú, se cierra: así VOLVER no pasa
      *   de una pantalla del menú a otra, sino a lo que había antes de entrar al menú.
      */
+
+    private fun cerrarSesion(activity: Activity) {
+        (activity.application as RandomSpaceApp).sesion.cerrarSesion()
+        LoginGoogle(activity).olvidarCuenta()
+        // CLEAR_TASK cierra todas las pantallas: con "atrás" no se puede volver al juego sin sesión
+        val intent = Intent(activity, NameActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        activity.startActivity(intent)
+    }
     private fun abrir(activity: Activity, destino: Class<out Activity>) {
         if (activity.javaClass == destino) return
         activity.startActivity(Intent(activity, destino))

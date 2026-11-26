@@ -12,6 +12,8 @@ class SesionRepository(private val auth: FirebaseAuth) {
     fun sesionActual(): Sesion? =
         auth.currentUser?.let { Sesion(it.uid, it.displayName.orEmpty()) }
 
+    fun cerrarSesion() = auth.signOut()
+
     /** Inicia sesión en Firebase con el token que ha dado Google. */
     fun iniciarSesion(tokenGoogle: String): Single<Sesion> = Single.create { emisor ->
         auth.signInWithCredential(GoogleAuthProvider.getCredential(tokenGoogle, null))

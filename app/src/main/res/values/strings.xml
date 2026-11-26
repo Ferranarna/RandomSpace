@@ -23,6 +23,7 @@
     <string name="help_titulo">HELP</string>
     <string name="btn_volver">BACK</string>
     <string name="menu_salir">EXIT</string>
+    <string name="menu_cerrar_sesion">SIGN OUT</string>
 
     <!-- Pantalla de juego -->
     <string name="apuesta_titulo">"BET: "</string>

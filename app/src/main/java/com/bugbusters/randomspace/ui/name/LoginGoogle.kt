@@ -13,6 +13,9 @@ import com.bugbusters.randomspace.R
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import io.reactivex.rxjava3.core.Single
+import android.util.Log
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.exceptions.ClearCredentialException
 
 /** Abre el selector de cuentas de Google y devuelve el token de la cuenta elegida. */
 class LoginGoogle(private val activity: Activity) {
@@ -55,6 +58,21 @@ class LoginGoogle(private val activity: Activity) {
 
                 override fun onError(e: GetCredentialException) {
                     emisor.tryOnError(e)
+                }
+            }
+        )
+    }
+
+    /** Para que la próxima vez Google vuelva a preguntar con qué cuenta entrar. */
+    fun olvidarCuenta() {
+        CredentialManager.create(activity).clearCredentialStateAsync(
+            ClearCredentialStateRequest(),
+            null,
+            ContextCompat.getMainExecutor(activity),
+            object : CredentialManagerCallback<Void?, ClearCredentialException> {
+                override fun onResult(result: Void?) {}
+                override fun onError(e: ClearCredentialException) {
+                    Log.w("LoginGoogle", "No se pudo olvidar la cuenta", e)
                 }
             }
         )

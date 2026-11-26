@@ -21,7 +21,7 @@ class RandomSpaceApp : Application() {
 
     // by lazy: se crea la primera vez que alguien lo pide, y solo una vez
     val repositorio: RandomSpaceRepository by lazy {
-        RandomSpaceRepository(RandomSpaceDao(RandomSpaceDbHelper(this)))
+        RandomSpaceRepository(RandomSpaceDao(RandomSpaceDbHelper(this))) { sesion.sesionActual()?.uid }
     }
 
     // Quién ha iniciado sesión y su token

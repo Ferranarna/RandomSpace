@@ -22,6 +22,7 @@
     <string name="help_titulo">AYUDA</string>
     <string name="btn_volver">VOLVER</string>
     <string name="menu_salir">SALIR</string>
+    <string name="menu_cerrar_sesion">CERRAR SESIÓN</string>
 
     <!-- Pantalla de juego -->
     <string name="apuesta_titulo">"APUESTA: "</string>
