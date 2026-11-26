@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    activity_name.xml: primera pantalla, donde el jugador escribe su nombre (sin scroll).
+    activity_name.xml: primera pantalla (sin scroll). Primero se inicia sesión con Google
+    y después el jugador escribe su nombre. El código muestra una parte u otra.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,36 +34,56 @@
 
         <View style="@style/Espaciador" />
 
+        <!-- Momento 1: inicio de sesión -->
         <TextView
+            android:id="@+id/tvLogin"
             style="@style/TextoJuego"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/nombre_titulo"
+            android:gravity="center"
+            android:text="@string/login_titulo"
             android:textColor="@color/white" />
 
-        <!-- Campo de texto donde se escribe el nombre -->
-        <EditText
-            android:id="@+id/etNombre"
-            style="@style/Texto"
+        <!-- Momento 2: nombre del jugador (oculto hasta haber iniciado sesión) -->
+        <LinearLayout
+            android:id="@+id/grupoNombre"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/panel_magenta"
-            android:gravity="center"
-            android:hint="@string/nombre_hint"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:maxLength="15"
-            android:maxLines="1"
-            android:textColor="@color/green"
-            android:textColorHint="@color/purple" />
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/TextoJuego"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_titulo"
+                android:textColor="@color/white" />
+
+            <!-- Campo de texto donde se escribe el nombre -->
+            <EditText
+                android:id="@+id/etNombre"
+                style="@style/Texto"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/panel_magenta"
+                android:gravity="center"
+                android:hint="@string/nombre_hint"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxLength="15"
+                android:maxLines="1"
+                android:textColor="@color/green"
+                android:textColorHint="@color/purple" />
+        </LinearLayout>
 
         <View style="@style/Espaciador" />
         <View style="@style/Espaciador" />
     </LinearLayout>
 
-    <!-- ========== BOTÓN EMPEZAR (fijo abajo) ========== -->
+    <!-- ========== BOTONES (fijos abajo, solo se ve uno) ========== -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,9 +93,16 @@
         android:paddingBottom="16dp">
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnGoogle"
+            style="@style/BotonGoogle"
+            android:background="@drawable/btn_cian"
+            android:text="@string/btn_google" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnEmpezar"
             style="@style/BotonTitulo"
             android:background="@drawable/btn_verde"
-            android:text="@string/btn_empezar" />
+            android:text="@string/btn_empezar"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>
