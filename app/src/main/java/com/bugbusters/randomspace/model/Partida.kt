@@ -9,5 +9,7 @@ data class Partida(
     val resultado: Int,
     val saldoInicial: Int,
     val saldoFinal: Int,
-    val estado: EstadoPartida = EstadoPartida.EN_CURSO
+    val estado: EstadoPartida = EstadoPartida.EN_CURSO,
+    val latitud: Double? = null,
+    val longitud: Double? = null
 )

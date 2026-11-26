@@ -1,6 +1,11 @@
 package com.bugbusters.randomspace.ui.game
 
+import android.Manifest                                        // NUEVO (paso 3)
 import android.content.Intent
+import android.os.Build                                         // NUEVO (paso 3)
+import androidx.activity.result.contract.ActivityResultContracts  // NUEVO (paso 3)
+import com.bugbusters.randomspace.ui.result.NotificacionVictoria // NUEVO (paso 3)
+import com.bugbusters.randomspace.ui.result.UbicacionVictoria
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -29,6 +34,22 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import com.bugbusters.randomspace.ui.welcome.MainActivity
+import com.bugbusters.randomspace.model.Simbolo
+import android.view.animation.OvershootInterpolator
+import android.animation.ValueAnimator
+import androidx.core.animation.doOnEnd
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.lifecycle.Lifecycle
+import com.bugbusters.randomspace.game.GeneradorSimbolos
+import com.bugbusters.randomspace.ui.EstrellasView
+import com.bugbusters.randomspace.audio.SonidosRodillos
+import android.text.format.DateUtils
+import androidx.core.content.edit
+
 
 /**
  * Pantalla de la partida: bote, rodillos, saldo, apuesta y botón de girar.
@@ -51,6 +72,25 @@ class GameActivity : AppCompatActivity() {
     private lateinit var rodillos: List<ImageView>
     private lateinit var botonesJuego: List<View>
 
+    private lateinit var animador: AnimadorRodillos
+
+    // NUEVO (paso 2): efectos de sonido de los rodillos
+    private lateinit var sonidos: SonidosRodillos
+
+    // Permisos que usan las acciones al ganar (ubicación y notificaciones): se piden al entrar a jugar,
+    // en un solo diálogo, para que no choquen con el del calendario, que se pide al ganar
+    private val pedirPermisos =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { }
+
+    // Lo que hay que hacer cuando paren los rodillos (enseñar el resultado).
+    private var pendiente: (() -> Unit)? = null
+    // Saldo que se está viendo en pantalla (para contar desde ahí hasta el nuevo)
+    private var saldoMostrado = 0
+    // Tras una victoria o derrota los carteles quedan ocultos
+    private var bienvenidaPendiente = false
+    private var contador: ValueAnimator? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,6 +112,12 @@ class GameActivity : AppCompatActivity() {
             findViewById(R.id.rodillo3)
         )
 
+        animador = AnimadorRodillos(rodillos)
+        animador.mostrar(listOf(Simbolo.NEPTUNO, Simbolo.HAMBURGUESA, Simbolo.SATURNO))
+
+        // NUEVO (paso 2)
+        sonidos = SonidosRodillos(this)
+
         // Botones + y -: la tragaperras decide si se puede cambiar la apuesta
         findViewById<View>(R.id.btnMas).setOnClickListener {
             tragaperras.aumentarApuesta()
@@ -89,7 +135,9 @@ class GameActivity : AppCompatActivity() {
         activarJuego(false)
 
         // Botón VOLVER: cierra la pantalla y vuelve al inicio
-        findViewById<View>(R.id.btnVolver).setOnClickListener { MainActivity.irAlInicio(this) }
+        findViewById<View>(R.id.btnVolver).setOnClickListener {
+            if (!animador.girando) MainActivity.irAlInicio(this)
+        }
 
         // Estado inicial: "¡BIENVENIDO!" arriba, "¡PULSA GIRAR!" abajo y sin moneda
         findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
@@ -98,15 +146,33 @@ class GameActivity : AppCompatActivity() {
         findViewById<View>(R.id.ivMonedaResultado).visibility = View.INVISIBLE
 
         cargarPartida()
+
+        // Solo la primera vez: al girar el móvil la petición en curso se conserva, no hay que lanzarla otra vez
+        if (savedInstanceState == null) pedirPermisosQueFaltan()
     }
 
     // Al volver desde Victoria o Derrota se muestran ya el bote y el saldo de la partida nueva
     override fun onResume() {
         super.onResume()
         if (::tragaperras.isInitialized) actualizarMarcadores()
+        mostrarBienvenida()
+        // Si se cortó un giro al salir de la pantalla, ahora se enseña su resultado
+        // Si se cortó un giro al salir de la pantalla, ahora se enseña su resultado
+        val accion = pendiente
+        pendiente = null
+        accion?.invoke()
+    }
+
+    // Si se sale a mitad del giro se corta la animación (la tirada ya está guardada en la BD)
+    override fun onPause() {
+        animador.cancelar()
+        sonidos.terminar()        // NUEVO (paso 2): si se sale a mitad del giro, que no siga sonando
+        super.onPause()
     }
 
     override fun onDestroy() {
+        animador.cancelar()
+        sonidos.liberar()         // NUEVO (paso 2)
         suscripciones.clear()
         super.onDestroy()
     }
@@ -121,7 +187,8 @@ class GameActivity : AppCompatActivity() {
                         partida = datos.partida
                         tragaperras = Tragaperras(
                             saldoInicial = datos.partida.saldoFinal,
-                            boteInicial = datos.bote.cantidad
+                            boteInicial = datos.bote.cantidad,
+                            generador = GeneradorSimbolos { Simbolo.HAMBURGUESA } // PARA PODER PROBAR
                         )
                         actualizarMarcadores()
                         activarJuego(true)
@@ -131,25 +198,82 @@ class GameActivity : AppCompatActivity() {
         )
     }
 
+    // Solo los permisos que faltan; el de notificaciones solo existe desde Android 13. Lista vacía: no se pide nada
+    private fun pedirPermisosQueFaltan() {
+        val faltan = buildList {
+            if (!UbicacionVictoria.tienePermiso(this@GameActivity)) {
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                !NotificacionVictoria.puedeNotificar(this@GameActivity)
+            ) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+        if (faltan.isNotEmpty()) pedirPermisos.launch(faltan.toTypedArray())
+    }
+
+    // Hora de la primera tirada de una partida: se guarda la primera vez que se pide y se recuerda
+    // aunque se cierre la app. Con ella se calcula cuánto se ha tardado en ganar
+    private fun horaPrimeraTirada(partidaId: Long): Long {
+        val preferencias = getSharedPreferences(PREFERENCIAS_TIEMPO, MODE_PRIVATE)
+        val clave = "inicio_$partidaId"
+        val guardada = preferencias.getLong(clave, 0L)
+        if (guardada != 0L) return guardada
+
+        val ahora = System.currentTimeMillis()
+        preferencias.edit { putLong(clave, ahora) }
+        return ahora
+    }
+
     private fun girar() {
         val partidaActual = partida ?: return
+        if (animador.girando) return
+
+        // En la primera tirada de la partida se apunta la hora (en las siguientes no cambia)
+        horaPrimeraTirada(partidaActual.id)
 
         // Se guarda antes de girar porque si hay victoria o derrota la tragaperras reinicia el bote
         val boteAntes = tragaperras.bote
         val resultado = tragaperras.girar()
 
-        rodillos.zip(resultado.rodillos).forEach { (vista, simbolo) ->
-            vista.setImageResource(simbolo.imagen())
-        }
-        mostrarResultado(resultado)
-        // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
-        if (resultado.estado == EstadoPartida.EN_CURSO) actualizarMarcadores()
+        // La BD se guarda ya: si se sale a mitad de la animación, la tirada no se pierde
         guardar(partidaActual, resultado)
 
+        // Mientras giran no se puede tocar nada, y el resultado se enseña cuando paren los rodillos
+        activarJuego(false)
+        ocultarMensajes()
+        pendiente = { terminarGiro(resultado, boteAntes, partidaActual) }
+        animador.girar(resultado.rodillos, object : EscuchaGiro {
+            // suena al empezar y al parar cada rodillo
+            override fun alEmpezar() = sonidos.empezarGiro()
+
+            override fun alPararRodillo(indice: Int) = sonidos.pararRodillo(indice)
+
+            override fun alTerminar() {
+                sonidos.terminar()   // NUEVO (paso 2)
+                val accion = pendiente
+                pendiente = null
+                accion?.invoke()
+            }
+        })
+    }
+    private fun terminarGiro(resultado: ResultadoTirada, boteAntes: Int, partidaActual: Partida) {
+        // En victoria o derrota no hacen falta los carteles: esos datos ya se ven en su pantalla
+        if (resultado.estado == EstadoPartida.EN_CURSO) mostrarResultado(resultado) else prepararBienvenida()
+        // En victoria o derrota la tragaperras ya se ha reiniciado: esos marcadores se actualizan al volver a esta pantalla
+        if (resultado.estado == EstadoPartida.EN_CURSO) actualizarMarcadores(animarSaldo = true)
+        // En victoria o derrota los botones se activan cuando llega la partida nueva de la BD
+        if (partida != null) activarJuego(true)
+
         when (resultado.estado) {
-            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes)
-            EstadoPartida.DERROTA -> abrirDerrota(resultado, boteAntes)
-            EstadoPartida.EN_CURSO -> Unit
+            EstadoPartida.VICTORIA -> abrirVictoria(resultado, boteAntes, partidaActual)
+            EstadoPartida.DERROTA -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.5f) { abrirDerrota(resultado, boteAntes) }
+            // Una tirada normal en la que se pierden monedas también "duele", pero más suave
+            EstadoPartida.EN_CURSO -> when {
+                resultado.variacion < 0 -> efectoPantalla(R.color.red, sacudir = true, intensidad = 0.3f)
+                resultado.variacion > 0 -> lanzarEstrellas()
+            }
         }
     }
 
@@ -187,7 +311,7 @@ class GameActivity : AppCompatActivity() {
             .subscribe(
                 { nueva ->
                     partida = nueva
-                    activarJuego(true)
+                    if (!animador.girando) activarJuego(true)
                 },
                 { error -> mostrarError("No se pudo cerrar la partida", error) }
             )
@@ -203,10 +327,20 @@ class GameActivity : AppCompatActivity() {
     }
 
     //Bote, saldo y apuesta actuales.
-    private fun actualizarMarcadores() {
+    private fun actualizarMarcadores(animarSaldo: Boolean = false) {
         findViewById<TextView>(R.id.tvBote).text = formatear(tragaperras.bote)
-        findViewById<TextView>(R.id.tvSaldo).text = formatear(tragaperras.saldo)
         findViewById<TextView>(R.id.tvApuesta).text = tragaperras.apuesta.toString()
+
+        val saldo = findViewById<TextView>(R.id.tvSaldo)
+        contador?.cancel()
+        if (animarSaldo && saldoMostrado != tragaperras.saldo) {
+            contarSaldo(saldo, saldoMostrado, tragaperras.saldo)
+            // La moneda gira cuando termina de contar el saldo
+            girarMoneda(findViewById(R.id.ivMonedaSaldo), RETRASO_SEGUNDO_MENSAJE + DURACION_CUENTA)
+        } else {
+            saldo.text = formatear(tragaperras.saldo)
+        }
+        saldoMostrado = tragaperras.saldo
     }
 
     // Frase de la combinación y monedas ganadas (amarillo) o perdidas (rojo).
@@ -225,14 +359,132 @@ class GameActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.ivMonedaResultado).visibility =
             if (resultado.variacion == 0) View.INVISIBLE else View.VISIBLE
+
+        // Animaciones del resultado: primero el panel 1 y, un momento después, el panel 2
+        aparecer(findViewById(R.id.panelMensaje))
+        aparecer(findViewById(R.id.panelResultado), RETRASO_SEGUNDO_MENSAJE)
     }
 
-    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int) {
+    // Deja los carteles ocultos, pero con el mensaje de bienvenida listo para cuando se vuelva a esta pantalla
+    private fun prepararBienvenida() {
+        findViewById<TextView>(R.id.tvMensaje).setText(R.string.mensaje_bienvenida)
+        findViewById<TextView>(R.id.tvResultadoTitulo).setText(R.string.mensaje_pulsa_girar)
+        findViewById<TextView>(R.id.tvResultado).text = ""
+        findViewById<View>(R.id.ivMonedaResultado).visibility = View.INVISIBLE
+        bienvenidaPendiente = true
+    }
+
+    // Al volver a esta pantalla, los carteles de bienvenida aparecen con el mismo "pop"
+    private fun mostrarBienvenida() {
+        if (!bienvenidaPendiente) return
+        bienvenidaPendiente = false
+        aparecer(findViewById(R.id.panelMensaje))
+        aparecer(findViewById(R.id.panelResultado), RETRASO_SEGUNDO_MENSAJE)
+    }
+
+    // Mientras giran los rodillos, los dos paneles se desvanecen
+    private fun ocultarMensajes() {
+        listOf(R.id.panelMensaje, R.id.panelResultado).forEach { id ->
+            findViewById<View>(id).animate().cancel()
+            findViewById<View>(id).animate()
+                .alpha(0f).setStartDelay(0).setDuration(150).setInterpolator(null).start()
+        }
+    }
+
+    // El panel aparece creciendo desde pequeño, con un pequeño rebote, tras [retraso] ms
+    private fun aparecer(vista: View, retraso: Long = 0) {
+        vista.animate().cancel()
+        vista.scaleX = 0.6f
+        vista.scaleY = 0.6f
+        vista.alpha = 0f
+        vista.animate()
+            .scaleX(1f).scaleY(1f).alpha(1f)
+            .setStartDelay(retraso).setDuration(300)
+            .setInterpolator(OvershootInterpolator(2f))
+            .start()
+    }
+
+    // La moneda da una vuelta completa sobre su eje vertical, tras [retraso] ms
+    private fun girarMoneda(moneda: View, retraso: Long) {
+        moneda.animate().cancel()
+        moneda.rotationY = 0f
+        moneda.animate().rotationY(360f).setStartDelay(retraso).setDuration(500).start()
+    }
+
+    // El saldo cuenta desde [desde] hasta [hasta]: en verde si sube, en rojo si baja
+    private fun contarSaldo(vista: TextView, desde: Int, hasta: Int) {
+        vista.text = formatear(desde)
+        vista.setTextColor(ContextCompat.getColor(this, if (hasta > desde) R.color.green else R.color.red))
+        contador = ValueAnimator.ofInt(desde, hasta).apply {
+            startDelay = RETRASO_SEGUNDO_MENSAJE
+            duration = DURACION_CUENTA
+            addUpdateListener { vista.text = formatear(it.animatedValue as Int) }
+            doOnEnd {
+                vista.text = formatear(hasta)
+                vista.setTextColor(ContextCompat.getColor(this@GameActivity, R.color.yellow))
+            }
+            start()
+        }
+    }
+
+    // Destello de color sobre toda la pantalla (y sacudida si se pierde). Al acabar ejecuta [alTerminar]
+    private fun efectoPantalla(@ColorRes color: Int, sacudir: Boolean, intensidad: Float, alTerminar: () -> Unit = {}) {
+        val contenido = findViewById<ViewGroup>(android.R.id.content)
+        val destello = View(this).apply {
+            setBackgroundColor(ContextCompat.getColor(this@GameActivity, color))
+            alpha = 0f
+            // Se "come" los toques: mientras dura el efecto no se puede pulsar nada de lo que hay debajo
+            isClickable = true
+        }
+        contenido.addView(
+            destello,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        )
+
+        val animaciones = mutableListOf<Animator>(
+            ObjectAnimator.ofFloat(destello, View.ALPHA, 0f, intensidad, 0f).apply { duration = 700 }
+        )
+        if (sacudir) {
+            val dp = resources.displayMetrics.density
+            val principal = findViewById<View>(R.id.main)
+            animaciones.add(
+                ObjectAnimator.ofFloat(
+                    principal, View.TRANSLATION_X,
+                    0f, -12 * dp, 12 * dp, -8 * dp, 8 * dp, -4 * dp, 4 * dp, 0f
+                ).apply { duration = 500 }
+            )
+        }
+
+        AnimatorSet().apply {
+            playTogether(animaciones)
+            doOnEnd {
+                contenido.removeView(destello)
+                // Si el usuario ha salido de la pantalla mientras tanto, se abre cuando vuelva
+                if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) alTerminar() else pendiente = alTerminar
+            }
+            start()
+        }
+    }
+
+    // Pequeña explosión de estrellas desde los rodillos cuando se ganan monedas
+    private fun lanzarEstrellas() {
+        val estrellas = EstrellasView(this)
+        findViewById<ViewGroup>(android.R.id.content).addView(
+            estrellas,
+            ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        )
+        estrellas.lanzar(findViewById(R.id.contenedorRodillos))
+    }
+
+    private fun abrirVictoria(resultado: ResultadoTirada, boteAntes: Int, partidaActual: Partida) {
         val intent = Intent(this, VictoryActivity::class.java)
+            .putExtra(EXTRA_PARTIDA_ID, partidaActual.id)
+            .putExtra(EXTRA_INICIO_PARTIDA, horaPrimeraTirada(partidaActual.id))
             .putExtra(EXTRA_BOTE_BASE, boteAntes)
             .putExtra(EXTRA_MULTIPLICADOR, resultado.variacion / boteAntes)
             .putExtra(EXTRA_PREMIO, resultado.variacion)
             .putExtra(EXTRA_SALDO, resultado.saldoDespues)
+            .putExtra(EXTRA_SALDO_ANTES, resultado.saldoDespues - resultado.variacion)
         startActivity(intent)
     }
 
@@ -241,11 +493,14 @@ class GameActivity : AppCompatActivity() {
             .putExtra(EXTRA_BOTE_BASE, boteAntes)
             .putExtra(EXTRA_NUEVO_BOTE, tragaperras.bote)
             .putExtra(EXTRA_SALDO, resultado.saldoDespues)
+            .putExtra(EXTRA_SALDO_ANTES, resultado.saldoDespues - resultado.variacion)
         startActivity(intent)
     }
 
     companion object {
         private const val TAG = "GameActivity"
+        // Archivo de preferencias donde se guarda cuándo empezó a jugarse cada partida
+        private const val PREFERENCIAS_TIEMPO = "tiempos"
 
         // Claves de los datos que se pasan a las pantallas de victoria y derrota
         const val EXTRA_BOTE_BASE = "bote_base"
@@ -253,6 +508,9 @@ class GameActivity : AppCompatActivity() {
         const val EXTRA_PREMIO = "premio"
         const val EXTRA_NUEVO_BOTE = "nuevo_bote"
         const val EXTRA_SALDO = "saldo"
+        const val EXTRA_SALDO_ANTES = "saldo_antes"
+        const val EXTRA_PARTIDA_ID = "partida_id"
+        const val EXTRA_INICIO_PARTIDA = "inicio_partida"
 
         /** 1300 -> "1.300" */
         fun formatear(monedas: Int): String = String.format(Locale.GERMANY, "%,d", monedas)
@@ -263,5 +521,14 @@ class GameActivity : AppCompatActivity() {
         /** Fecha guardada en la BD (epoch millis) -> "19/10/2026" */
         fun formatearFecha(millis: Long): String =
             SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(millis))
+
+        /** Duración en milisegundos -> "04:32", o "1:04:32" si pasa de una hora */
+        fun formatearDuracion(millis: Long): String = DateUtils.formatElapsedTime(millis / 1000)
+
+        // Cuánto después del primer mensaje salen el segundo y el saldo
+        private const val RETRASO_SEGUNDO_MENSAJE = 300L
+
+        // Cuánto tarda el saldo en contar hasta su nuevo valor
+        private const val DURACION_CUENTA = 600L
     }
 }

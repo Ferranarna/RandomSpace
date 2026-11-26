@@ -39,6 +39,8 @@
             android:textColor="@color/yellow"
             tools:text="10.000" />
 
-        <ImageView style="@style/Moneda" />
+        <ImageView
+            android:id="@+id/ivMonedaBote"
+            style="@style/Moneda" />
     </LinearLayout>
 </FrameLayout>
